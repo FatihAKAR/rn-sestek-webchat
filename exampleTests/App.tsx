@@ -1,11 +1,12 @@
-import React, { useRef } from 'react';
-import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
-import { ChatModal, ChatModalRef } from '../src/index';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
+import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {ChatModal, ChatModalRef} from '../src/index';
+import FlashMessage, {showMessage} from 'react-native-flash-message';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import RNFetchBlob from 'react-native-fetch-blob';
-import { Slider } from '@miblanchard/react-native-slider';
-import { WebView } from 'react-native-webview';
+import {Slider} from '@miblanchard/react-native-slider';
+import {WebView} from 'react-native-webview';
+import AudioRecord from 'react-native-audio-record';
 
 export default function App() {
   const modalRef = useRef<ChatModalRef>(null);
@@ -24,6 +25,14 @@ export default function App() {
     }
     modalRef.current?.endConversation();
   };
+
+  const [responseData, setResponseData] = useState<any>({});
+  const setResponse = (value: any) => {
+    setResponseData(value);
+  };
+  useEffect(() => {
+    console.log(responseData);
+  }, [responseData]);
 
   const pressTriggerVisible = () => {
     if (!modalRef.current?.conversationStatus) {
@@ -46,23 +55,28 @@ export default function App() {
     return new Promise<void>((resolve, reject) => {
       resolve();
     });
-  }
+  };
 
   const customActionDataEx = {
-    tel:"905301138326"
-  }
+    tel: '905301138326',
+  };
+
+  const customActionDataExNdUi = {
+    tel: '905301138326',
+    
+  };
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <Image
-          style={{ height: 300 }}
+          style={{height: 300}}
           source={require('./src/images/knovvu_subtitle.png')}
           resizeMode="contain"
         />
       </View>
 
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <Pressable style={styles.button} onPress={pressStartConversation}>
           <Text style={styles.text}>Start Conversation</Text>
         </Pressable>
@@ -90,8 +104,8 @@ export default function App() {
           <Text style={styles.text}>Record Play</Text>
         </Pressable>
       </View>*/}
-      <View style={{ flex: 0.5, justifyContent: 'center' }}>
-        <Text style={{ margin: 20, fontSize: 12, fontWeight: '100' }}>
+      <View style={{flex: 0.5, justifyContent: 'center'}}>
+        <Text style={{margin: 20, fontSize: 12, fontWeight: '100'}}>
           Sestek is a global technology company helping organizations with
           Conversational Solutions to be data-driven, increase efficiency and
           deliver better experiences for their customers. Sestek’s AI-powered
@@ -103,20 +117,24 @@ export default function App() {
       {/* @ts-expect-error Server Component */}
       <ChatModal
         url={`https://eu.va.knovvu.com/webchat/chathub`}
+        //url={`https://nd-test-webchat.sestek.com/chathub`}
         modules={{
           AudioRecorderPlayer: AudioRecorderPlayer,
           RNFS: RNFetchBlob,
           RNSlider: Slider,
-          RNWebView: null
+          RNWebView: null,
+          Record: AudioRecord,
         }}
         ref={modalRef}
         defaultConfiguration={{
           sendConversationStart: true,
           tenant: 'Demo',
-          projectName: 'EN_BANKING_DEMO_v1.4',
+          projectName: 'MasterBankingDemo_1_0',
           channel: 'Mobil',
           clientId: 'mobile-testing',
-          customActionData:JSON.stringify(customActionDataEx)
+          enableNdUi: false,
+          getResponseData: setResponse,
+          customActionData: JSON.stringify(customActionDataExNdUi)
         }}
         customizeConfiguration={{
           headerColor: '#7f81ae',
@@ -141,7 +159,7 @@ export default function App() {
           messageColor: '#FCFBF7',
           messageBoxColor: '#7f81ae',
           //bodyColorOrImage: { type: 'image', value: 'https://i.pinimg.com/550x/4a/6f/59/4a6f59296f90c11d77744720ca10d1af.jpg' },
-          bodyColorOrImage: { type: 'color', value: '#7f81ae' },
+          bodyColorOrImage: {type: 'color', value: '#7f81ae'},
           firsIcon: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
@@ -150,7 +168,7 @@ export default function App() {
           firstSize: 70,
           leftMessageBoxColor: 'white',
           sliderMaximumTrackTintColor: 'gray',
-          sliderThumbTintColor: "blue",
+          sliderThumbTintColor: 'blue',
           sliderMinimumTrackTintColor: 'pink',
           sliderPauseImage: {
             type: 'image',
@@ -160,7 +178,27 @@ export default function App() {
             type: 'image',
             value: require('../src/image/play2.png'),
           },
-          beforeAudioClick: beforeAudioFunc
+          beforeAudioClick: beforeAudioFunc,
+          closeModalSettings: {
+            use: true,
+            text: "Chat'ten çıkmak istediğinize emin misiniz ?",
+            textColor: 'black',
+            background: 'white',
+            buttons: {
+              yesButton: {
+                text: 'Evet',
+                textColor: 'white',
+                background: '#7f81ae',
+                borderColor: 'transparent',
+              },
+              noButton: {
+                text: 'Hayır',
+                textColor: 'black',
+                background: 'transparent',
+                borderColor: 'black',
+              },
+            },
+          },
         }}
       />
     </View>

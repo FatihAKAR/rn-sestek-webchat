@@ -10,8 +10,14 @@ const useChat = ({
   url,
 }: PropsUseChat) => {
   const [messageList, setMessageList] = useState<any>(messages || []);
+  const sessionIdNew = defaultConfiguration.enableNdUi ? 'Mobil' + sessionId : sessionId
   const addMessageList = (message: any) => {
     setMessageList((messages: any) => [...messages, message]);
+  };
+
+  const { enableNdUi, getResponseData } = defaultConfiguration;
+  const setResponseFunc = (customAction: any, customActionData: any) => {
+    getResponseData({ customAction, customActionData });
   };
 
   useEffect(() => {
@@ -59,15 +65,33 @@ const useChat = ({
 
   const attachClientOnMessage = () => {
     client.onmessage((d: any, m: any) => {
-      console.log(d, m);
+      console.log(d, '-', m);
       if (typeof m !== 'object') {
         m = JSON.parse(m);
+        if (m?.channelData) {
+          if (enableNdUi) {
+            if (m?.channelData?.CustomActionData) {
+              setResponseFunc(
+                m?.channelData?.CustomAction,
+                m?.channelData?.CustomActionData
+              );
+            }
+          } else {
+            if (m?.channelData?.CustomProperties) {
+              setResponseFunc(
+                m?.channelData?.CustomAction,
+                m?.channelData?.CustomProperties
+              );
+            }
+          }
+        }
+
         if (m && !m.timestamp) {
           m.timestamp = Date.now();
         }
         if (m.type === 'SpeechRecognized') {
           var textMessage = m.channelData?.CustomProperties?.textFromSr;
-           m.type = 'message';
+          m.type = 'message';
           if (textMessage === null || textMessage === '') {
             m.text = '🤷‍♀️';
             addMessageList(m);
@@ -77,17 +101,19 @@ const useChat = ({
               const update = {
                 text: textMessage,
                 channel: 'SpeechRecognized',
-              }
-               const updatedLastMessage = { ...lastMessage, ...update };
-              const updatedList = prevMessageList.slice(0, -1).concat(updatedLastMessage);
+              };
+              const updatedLastMessage = { ...lastMessage, ...update };
+              const updatedList = prevMessageList
+                .slice(0, -1)
+                .concat(updatedLastMessage);
               return updatedList;
             });
           }
-        }else{
+        } else {
+          console.log(m);
           addMessageList(m);
         }
       }
-      
     });
   };
 
@@ -102,11 +128,11 @@ const useChat = ({
         tenant: defaultConfiguration.tenant,
         channel: bot ? null : defaultConfiguration.channel,
         project: defaultConfiguration.projectName,
-        conversationId: sessionId,
+        conversationId: sessionIdNew,
         fullName: defaultConfiguration.fullName,
       });
       await client.sendAsync(
-        sessionId,
+        sessionIdNew,
         message,
         defaultConfiguration.customAction,
         defaultConfiguration.customActionData,
@@ -130,7 +156,7 @@ const useChat = ({
       tenant: defaultConfiguration.tenant,
       channel: defaultConfiguration.channel,
       project: defaultConfiguration.projectName,
-      conversationId: sessionId,
+      conversationId: sessionIdNew,
       fullName: defaultConfiguration.fullName,
     });
     console.log(filename);
@@ -146,7 +172,7 @@ const useChat = ({
       filename: filename,
       type: 'audio/' + filename.split('.')[1],
     });
-    formData.push({ name: 'user', data: sessionId });
+    formData.push({ name: 'user', data: sessionIdNew });
     formData.push({
       name: 'project',
       data: defaultConfiguration.projectName || '',
@@ -166,7 +192,7 @@ const useChat = ({
     });
     formData.push({
       name: 'customActionData',
-      data: defaultConfiguration.customActionData || '',
+      data: defaultConfiguration.customActionData || '{}',
     });
     formData.push({
       name: 'channel',
@@ -174,7 +200,6 @@ const useChat = ({
     });
 
     const replaceLink = url.replace('chathub', 'Home/SendAudio');
-
     rnfs
       .fetch(
         'POST',
@@ -191,10 +216,11 @@ const useChat = ({
           /<\/?[^>]+(>|$)/g,
           ''
         );
+        console.log("mmm : ",resp.json())
         sendMessage(message, true);
       })
       .catch((err: any) => {
-        //console.log(err)
+        console.log(err);
       })
       .finally(() => {
         setMessageList((messages: any) =>
@@ -214,7 +240,7 @@ const useChat = ({
       tenant: defaultConfiguration.tenant,
       channel: defaultConfiguration.channel,
       project: defaultConfiguration.projectName,
-      conversationId: sessionId,
+      conversationId: sessionIdNew,
       fullName: defaultConfiguration.fullName,
       userAgent: 'USERAGENT EKLENECEK',
       browserLanguage: 'tr', // BURASI DİNAMİK İSTENECEK
