@@ -53,7 +53,7 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
       (async () => {
         if (props.defaultConfiguration.integrationId) {
           const css = await getCssIntegration(
-            '24943652-7235-d2ce-ff39-3a0af91ec61e',
+            props.defaultConfiguration.integrationId,
             props.customizeConfiguration
           );
         } else {

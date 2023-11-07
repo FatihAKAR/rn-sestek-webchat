@@ -47,7 +47,6 @@ const StyleContextProvider = (props: any) => {
     integrationId: string,
     propsCustomizeConfiguration: any
   ) => {
-    console.log('veriiiiii');
     const response = await fetch(
       'https://eu.va.knovvu.com/webchat/settings/' + integrationId,
       {
