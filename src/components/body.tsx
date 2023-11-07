@@ -9,22 +9,22 @@ import MessageBox from './messageBox';
 const BodyComponent: FC<PropsBodyComponent> = (props) => {
   const scrollView = useRef<ScrollView>(null);
   const {
-    incomingIcon,
-    outgoingIcon,
-    incomingText,
-    outgoingText,
-    outgoingTextColor,
-    incomingTextColor,
+    userMessageBoxIcon,
+    chatBotMessageIcon,
+    userMessageBoxHeaderName,
+    chatBotMessageBoxHeaderName,
+    chatBotMessageBoxHeaderNameColor,
+    userMessageBoxHeaderNameColor,
   } = props.customizeConfiguration;
 
   const getUserName = (channel: any) => {
-    return channel ? incomingText || 'User' : outgoingText || 'Chatbot';
+    return channel ? userMessageBoxHeaderName || 'User' : chatBotMessageBoxHeaderName || 'Chatbot';
   };
 
   const getTextColor = (channel: any) => {
     return channel
-      ? incomingTextColor || 'black'
-      : outgoingTextColor || 'black';
+      ? userMessageBoxHeaderNameColor || 'black'
+      : chatBotMessageBoxHeaderNameColor || 'black';
   };
 
   return (
@@ -53,13 +53,13 @@ const BodyComponent: FC<PropsBodyComponent> = (props) => {
                 avatar={
                   x.channel
                     ? GeneralManager.returnIconData(
-                        incomingIcon?.type,
-                        incomingIcon?.value,
+                        userMessageBoxIcon?.type,
+                        userMessageBoxIcon?.value,
                         RobotIcon
                       )
                     : GeneralManager.returnIconData(
-                        outgoingIcon?.type,
-                        outgoingIcon?.value,
+                        chatBotMessageIcon?.type,
+                        chatBotMessageIcon?.value,
                         RobotIcon
                       )
                 }

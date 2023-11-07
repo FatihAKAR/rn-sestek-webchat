@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import styles from './style';
 import Avatar from './avatar';
 import {
@@ -15,29 +15,25 @@ import AudioComponent from './audio';
 import Markdown from '../../plugin/markdown/index';
 import { Recorder } from '../../services';
 import TypingAnimation from '../../plugin/typing';
+import { StyleContext } from '../../context/StyleContext';
 
 const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
-  const { messageBoxColor, messageColor } = props.customizeConfiguration;
-
   const WebView = props.modules.RNWebView;
 
   const webViewRef = useRef<any>();
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const changeActiveSlide = (number: number) => setActiveSlide(number);
-
-  const leftMessageBoxColorValue =
-    props.customizeConfiguration.leftMessageBoxColor;
+  const { appStyle } = useContext(StyleContext);
+  console.log(props.position);
   var positionCls = [
     styles.rceMbox,
     props.position === 'right' && styles.rceMboxRight,
-    messageColor
-      ? {
-          backgroundColor:
-            props.position === 'right'
-              ? messageColor
-              : leftMessageBoxColorValue,
-        }
-      : {},
+    appStyle?.chatBotMessageBoxBackground && {
+      backgroundColor:
+        props.position != 'right'
+          ? appStyle?.userMessageBoxBackground
+          : appStyle?.chatBotMessageBoxBackground,
+    },
   ];
   var thatAbsoluteTime =
     props.type !== 'text' &&
@@ -122,20 +118,41 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
         {props.type === 'message' &&
           props.activity?.attachments &&
           props.activity?.attachments[0]?.content?.title && (
-            <Markdown styles={styles.rceMboxText}>
+            <Markdown
+              styles={styles.rceMboxText}
+              color={
+                props.position != 'right'
+                  ? appStyle?.userMessageBoxTextColor
+                  : appStyle?.chatBotMessageBoxTextColor
+              }
+            >
               {props.activity?.attachments[0]?.content?.title}
             </Markdown>
           )}
         {props.type === 'message' &&
           props.activity?.attachments &&
           props.activity?.attachments[0]?.content?.subtitle && (
-            <Markdown styles={styles.rceMboxText}>
+            <Markdown
+              styles={styles.rceMboxText}
+              color={
+                props.position != 'right'
+                  ? appStyle?.userMessageBoxTextColor
+                  : appStyle?.chatBotMessageBoxTextColor
+              }
+            >
               {props.activity?.attachments[0]?.content?.subtitle}
             </Markdown>
           )}
         {(props.type === 'text' || props.type === 'message') &&
           (props.activity.text || props.activity.message) && (
-            <Markdown styles={styles.rceMboxText}>
+            <Markdown
+              styles={styles.rceMboxText}
+              color={
+                props.position != 'right'
+                  ? appStyle?.userMessageBoxTextColor
+                  : appStyle?.chatBotMessageBoxTextColor
+              }
+            >
               {props.activity.text || props.activity.message}
             </Markdown>
           )}
@@ -143,7 +160,14 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
         {props.activity?.type === 'message' &&
           props.activity?.attachments &&
           props.activity?.attachments[0]?.content?.text && (
-            <Markdown style={styles.rceMboxText}>
+            <Markdown
+              style={styles.rceMboxText}
+              color={
+                props.position != 'right'
+                  ? appStyle?.userMessageBoxTextColor
+                  : appStyle?.chatBotMessageBoxTextColor
+              }
+            >
               {props.activity?.attachments[0]?.content?.text}
             </Markdown>
           )}
@@ -173,13 +197,34 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
                   html: `<iframe width="100%" height="100%" id="gmap_canvas" src="https://maps.google.com/maps?q=${props.activity.entities[0]?.geo.latitude},${props.activity.entities[0]?.geo.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>`,
                 }}
               />
-              <Markdown style={styles.rceMboxText}>
+              <Markdown
+                style={styles.rceMboxText}
+                color={
+                  props.position != 'right'
+                    ? appStyle?.userMessageBoxTextColor
+                    : appStyle?.chatBotMessageBoxTextColor
+                }
+              >
                 {props.activity.entities[0]?.geo?.name}
               </Markdown>
-              <Markdown style={styles.rceMboxText}>
+              <Markdown
+                style={styles.rceMboxText}
+                color={
+                  props.position != 'right'
+                    ? appStyle?.userMessageBoxTextColor
+                    : appStyle?.chatBotMessageBoxTextColor
+                }
+              >
                 {props.activity.entities[0]?.address}
               </Markdown>
-              <Markdown style={styles.rceMboxText}>
+              <Markdown
+                style={styles.rceMboxText}
+                color={
+                  props.position != 'right'
+                    ? appStyle?.userMessageBoxTextColor
+                    : appStyle?.chatBotMessageBoxTextColor
+                }
+              >
                 {props.activity.entities[0]?.hasMap}
               </Markdown>
             </View>
@@ -194,10 +239,22 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
                 onPress={() => onPressButton(button?.value || button?.title)}
                 style={[
                   styles.rceMButton,
-                  messageBoxColor ? { backgroundColor: messageBoxColor } : {},
+                  appStyle?.chatBotMessageBoxButtonBackground
+                    ? {
+                        backgroundColor:
+                          appStyle?.chatBotMessageBoxButtonBackground,
+                      }
+                    : {},
                 ]}
               >
-                <Text style={styles.rceMButtonText}>{button?.title}</Text>
+                <Text
+                  style={{
+                    ...styles.rceMButtonText,
+                    color: appStyle?.chatBotMessageBoxButtonTextColor,
+                  }}
+                >
+                  {button?.title}
+                </Text>
               </TouchableOpacity>
             )
           )}
@@ -220,13 +277,40 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
         />
 
         {item.title && (
-          <Markdown styles={styles.rceMboxText}>{item.title}</Markdown>
+          <Markdown
+            styles={styles.rceMboxText}
+            color={
+              props.position != 'right'
+                ? appStyle?.userMessageBoxTextColor
+                : appStyle?.chatBotMessageBoxTextColor
+            }
+          >
+            {item.title}
+          </Markdown>
         )}
         {item.subtitle && (
-          <Markdown styles={styles.rceMboxText}>{item.subtitle}</Markdown>
+          <Markdown
+            styles={styles.rceMboxText}
+            color={
+              props.position != 'right'
+                ? appStyle?.userMessageBoxTextColor
+                : appStyle?.chatBotMessageBoxTextColor
+            }
+          >
+            {item.subtitle}
+          </Markdown>
         )}
         {item.text && (
-          <Markdown styles={styles.rceMboxText}>{item.text}</Markdown>
+          <Markdown
+            styles={styles.rceMboxText}
+            color={
+              props.position != 'right'
+                ? appStyle?.userMessageBoxTextColor
+                : appStyle?.chatBotMessageBoxTextColor
+            }
+          >
+            {item.text}
+          </Markdown>
         )}
 
         {item?.buttons?.map((button: any, index: number) => (
@@ -235,10 +319,22 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
             onPress={() => onPressButton(button?.value || button?.title)}
             style={[
               styles.rceMButton,
-              messageBoxColor ? { backgroundColor: messageBoxColor } : {},
+              appStyle?.chatBotMessageBoxButtonBackground
+                ? {
+                    backgroundColor:
+                      appStyle?.chatBotMessageBoxButtonBackground,
+                  }
+                : {},
             ]}
           >
-            <Text style={styles.rceMButtonText}>{button?.title}</Text>
+            <Text
+              style={{
+                ...styles.rceMButtonText,
+                color: appStyle?.chatBotMessageBoxButtonTextColor,
+              }}
+            >
+              {button?.title}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -299,7 +395,7 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
     return <TypingAnimation></TypingAnimation>;
   };
   return (
-    <View style={styles.rceContainerMbox}>
+    <View style={{ ...styles.rceContainerMbox, paddingTop: 15 }}>
       {props.type === 'system' ? null : (
         <View style={[positionCls]}>
           <View style={styles.rceMboxBody}>
@@ -361,7 +457,15 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
             {props.activity.type === 'typing' ? renderTyping() : null}
 
             <View style={[thatAbsoluteTime && styles.rceMboxTimeBlock]}>
-              <Text style={styles.rceMboxTimeText}>
+              <Text
+                style={{
+                  ...styles.rceMboxTimeText,
+                  color:
+                    props.position != 'right'
+                      ? appStyle?.userMessageBoxTextColor
+                      : appStyle?.chatBotMessageBoxTextColor,
+                }}
+              >
                 {props.activity?.timestamp &&
                   (props.dateString ||
                     `${new Date(

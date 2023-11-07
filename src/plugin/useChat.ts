@@ -65,7 +65,7 @@ const useChat = ({
 
   const attachClientOnMessage = () => {
     client.onmessage((d: any, m: any) => {
-      console.log(d, '-', m);
+      // console.log(d, '-', m);
       if (typeof m !== 'object') {
         m = JSON.parse(m);
         if (m?.channelData) {
@@ -110,7 +110,7 @@ const useChat = ({
             });
           }
         } else {
-          console.log(m);
+          // console.log(m);
           addMessageList(m);
         }
       }
@@ -216,7 +216,7 @@ const useChat = ({
           /<\/?[^>]+(>|$)/g,
           ''
         );
-        console.log("mmm : ",resp.json())
+        // console.log("mmm : ",resp.json())
         sendMessage(message, true);
       })
       .catch((err: any) => {

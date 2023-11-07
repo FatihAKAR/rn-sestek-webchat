@@ -53,30 +53,30 @@ const  modalRef = useRef<ChatModalRef>(null);
 		bottomInputText:  'Bottom input text..',
 		//bottomVoiceIcon: "<Cmp />",
 		//bottomSendIcon: "<Cmp />",
-		incomingIcon: { 
+		userMessageBoxIcon: { 
 			type:  'uri', 
 			value:  'another_link' 
 		},
-		incomingText:  '',
-		incomingTextColor:  'black',
-		outgoingIcon: { 
+		userMessageBoxHeaderName:  '',
+		userMessageBoxHeaderNameColor:  'black',
+		chatBotMessageIcon: { 
 			type:  'component', 
 			value:  require('./images/knovvu_logo.png') 
 		},
-		outgoingText:  'Knovvu',
-		outgoingTextColor:  '#7f81ae',
-		messageColor:  '#FCFBF7',
-		messageBoxColor:  '#7f81ae',
-		bodyColorOrImage: { 
+		chatBotMessageBoxHeaderName:  'Knovvu',
+		chatBotMessageBoxHeaderNameColor:  '#7f81ae',
+		chatBotMessageBoxBackground:  '#FCFBF7',
+		chatBotMessageBoxButtonBackground:  '#7f81ae',
+		chatBody: { 
 			type:  'color', 
 			value:  '#7f81ae' 
 		},
-		firsIcon: { 
+		chatStartButton: { 
 			type:  'component', 
 			value:  require('./images/knovvu_logo.png') 
 		},
-		firstColor:  'white',
-		firstSize:  70,
+		chatStartButtonBackground:  'white',
+		chatStartButtonBackgroundSize:  70,
 	}}
 />
 ```

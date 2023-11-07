@@ -80,7 +80,6 @@ export default StyleSheet.create({
 
     rceMboxTimeText: {
         textAlign: 'right',
-        color: '#777',
         fontSize: 12,
     },
 

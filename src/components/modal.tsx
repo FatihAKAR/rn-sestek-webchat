@@ -1,4 +1,12 @@
-import React, { forwardRef, useState, useImperativeHandle } from 'react';
+import React, {
+  forwardRef,
+  useState,
+  useImperativeHandle,
+  useContext,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
 import {
   Alert,
   Modal,
@@ -14,6 +22,7 @@ import FooterComponent from './footer';
 import HeaderComponent from './header';
 import { styles } from './modal-style';
 import CloseModal from './closeModal';
+import { StyleContext } from '../context/StyleContext';
 
 export interface ModalCompRef {
   messageList: any;
@@ -33,24 +42,35 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
       rnfs: props.modules.RNFS,
     });
 
-    //console.log(JSON.stringify(messageList));
-    const {
-      bodyColorOrImage,
-      headerColor,
-      headerText,
-      bottomColor,
-      bottomInputText,
-    } = props.customizeConfiguration;
-
     useImperativeHandle(ref, () => ({
       messageList: messageList,
     }));
+
+    const { appStyle, handleStyle, getCssIntegration } =
+      useContext(StyleContext);
+
+    useEffect(() => {
+      (async () => {
+        if (props.defaultConfiguration.integrationId) {
+          const css = await getCssIntegration(
+            '24943652-7235-d2ce-ff39-3a0af91ec61e',
+            props.customizeConfiguration
+          );
+        } else {
+          handleStyle(
+            props.customizeConfiguration,
+            props.defaultConfiguration.tenant,
+            props.defaultConfiguration.projectName
+          );
+        }
+      })();
+    }, []);
 
     return (
       <Modal
         animationType={'slide'}
         transparent={true}
-        visible={props.visible}
+        visible={props.visible && Object.keys(appStyle).length > 0}
         onRequestClose={() => {
           props.closeModal();
         }}
@@ -70,12 +90,14 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
           <View
             style={[
               styles.header,
-              headerColor ? { backgroundColor: headerColor } : {},
+              appStyle?.headerColor
+                ? { backgroundColor: appStyle?.headerColor }
+                : {},
             ]}
           >
             <HeaderComponent
               {...props}
-              headerText={headerText || undefined}
+              headerText={appStyle?.headerText || undefined}
               hideIcon={props.customizeConfiguration.hideIcon}
               closeIcon={props.customizeConfiguration.closeIcon}
             />
@@ -84,14 +106,14 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
             style={{
               flex: 1,
               backgroundColor:
-                bodyColorOrImage?.type == 'color'
-                  ? bodyColorOrImage.value
+                appStyle?.chatBody?.type == 'color'
+                  ? appStyle?.chatBody?.value
                   : '#fff',
             }}
           >
-            {bodyColorOrImage?.type == 'image' && (
+            {appStyle?.chatBody?.type == 'image' && (
               <ImageBackground
-                source={{ uri: bodyColorOrImage?.value }}
+                source={{ uri: appStyle?.chatBody?.value }}
                 style={{ width: '100%', height: '100%' }}
                 resizeMode="stretch"
               >
@@ -104,7 +126,7 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
                 />
               </ImageBackground>
             )}
-            {bodyColorOrImage?.type != 'image' && (
+            {appStyle?.chatBody?.type != 'image' && (
               <BodyComponent
                 modules={props.modules}
                 customizeConfiguration={props.customizeConfiguration}
@@ -117,7 +139,9 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
           <View
             style={[
               styles.footer,
-              bottomColor ? { backgroundColor: bottomColor } : {},
+              appStyle?.bottomColor
+                ? { backgroundColor: appStyle?.bottomColor }
+                : {},
             ]}
           >
             <FooterComponent
@@ -126,7 +150,7 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
               changeInputData={changeInputData}
               sendMessage={sendMessage}
               sendAudio={sendAudio}
-              placeholderText={bottomInputText}
+              placeholderText={appStyle?.bottomInputText}
             />
           </View>
         </KeyboardAvoidingView>

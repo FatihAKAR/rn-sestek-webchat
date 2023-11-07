@@ -5,28 +5,31 @@ export default interface PropsCustomizeConfiguration {
   bottomInputText?: string;
   bottomVoiceIcon?: IconType;
   bottomSendIcon?: IconType;
-  incomingIcon?: IconType;
-  incomingText?: string;
-  incomingTextColor?: string;
-  outgoingIcon?: IconType;
-  outgoingText?: string;
-  outgoingTextColor?: string;
-  messageColor?: string;
-  messageBoxColor?: string;
-  bodyColorOrImage?: BodyColorOrImageType;
-  firstIconHide?: boolean;
-  firsIcon?: IconType;
-  firstColor?: string;
-  firstSize?: number;
+  userMessageBoxIcon?: IconType;
+  userMessageBoxTextColor?: string;
+  userMessageBoxHeaderName?: string;
+  userMessageBoxHeaderNameColor?: string;
+  chatBotMessageIcon?: IconType;
+  chatBotMessageBoxTextColor?: string;
+  chatBotMessageBoxHeaderName?: string;
+  chatBotMessageBoxHeaderNameColor?: string;
+  chatBotMessageBoxBackground?: string;
+  chatBotMessageBoxButtonBackground?: string;
+  chatBotMessageBoxButtonTextColor?: string;
+  chatBody?: BodyColorOrImageType;
+  chatStartButtonHide?: boolean;
+  chatStartButton?: IconType;
+  chatStartButtonBackground?: string;
+  chatStartButtonBackgroundSize?: number;
   closeIcon?: any;
   hideIcon?: any;
-  leftMessageBoxColor?: string
+  userMessageBoxBackground?: string;
   sliderMinimumTrackTintColor?: string;
   sliderMaximumTrackTintColor?: string;
   sliderThumbTintColor?: string;
   sliderPlayImage?: BodyColorOrImageType;
   sliderPauseImage?: BodyColorOrImageType;
-  closeModalSettings: object,
+  closeModalSettings: object;
   beforeAudioClick?: () => Promise<void>;
 }
 

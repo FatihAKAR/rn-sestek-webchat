@@ -19,6 +19,7 @@ import { GeneralManager, SignalRClient } from '../services';
 import ModalComponent, { ModalCompRef } from '../components/modal';
 import { ChatIcon } from '../image';
 import type { PropsChatModal } from '../types';
+import { StyleContextProvider } from '../context/StyleContext';
 
 export interface ChatModalRef {
   triggerVisible: () => void;
@@ -30,7 +31,7 @@ export interface ChatModalRef {
 
 let sessionId = GeneralManager.createUUID();
 let client = new SignalRClient(GeneralManager.getWebchatHost());
-console.log("sesiom : ",sessionId)
+
 export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
   (props, ref) => {
     if (props?.defaultConfiguration?.enableNdUi) {
@@ -99,28 +100,34 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
       responseData: modalRef.current?.responseData,
     }));
 
-    const { firstColor, firstSize, firsIcon, firstIconHide } =
-      props.customizeConfiguration;
+    const {
+      chatStartButtonBackground,
+      chatStartButtonBackgroundSize,
+      chatStartButton,
+      chatStartButtonHide,
+    } = props.customizeConfiguration;
 
     return (
       <>
-        {!firstIconHide && (
+        {!chatStartButtonHide && (
           <View style={styles.mainContainer}>
             <TouchableOpacity
               style={[
                 styles.floatBottomRight,
-                firstColor ? { backgroundColor: firstColor } : {},
+                chatStartButtonBackground
+                  ? { backgroundColor: chatStartButtonBackground }
+                  : {},
               ]}
               onPress={() => startConversation()}
             >
               <Image
                 style={{
-                  width: firstSize || 50,
-                  height: firstSize || 50,
+                  width: chatStartButtonBackgroundSize || 50,
+                  height: chatStartButtonBackgroundSize || 50,
                 }}
                 source={GeneralManager.returnIconData(
-                  firsIcon?.type,
-                  firsIcon?.value,
+                  chatStartButton?.type,
+                  chatStartButton?.value,
                   ChatIcon
                 )}
               />
@@ -128,21 +135,25 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
           </View>
         )}
         {start && (
-          <ModalComponent
-            ref={modalRef}
-            url={props?.url || ''}
-            modules={props.modules}
-            customizeConfiguration={props.customizeConfiguration}
-            defaultConfiguration={props.defaultConfiguration}
-            visible={visible}
-            closeConversation={endConversation}
-            closeModal={triggerVisible}
-            sessionId={sessionId}
-            client={client}
-            closedModalManagment={{ closeModal, setCloseModal }}
-            clickClosedConversationModalFunc={clickClosedConversationModalFunc}
-            //...props}
-          />
+          <StyleContextProvider>
+            <ModalComponent
+              ref={modalRef}
+              url={props?.url || ''}
+              modules={props.modules}
+              customizeConfiguration={props.customizeConfiguration}
+              defaultConfiguration={props.defaultConfiguration}
+              visible={visible}
+              closeConversation={endConversation}
+              closeModal={triggerVisible}
+              sessionId={sessionId}
+              client={client}
+              closedModalManagment={{ closeModal, setCloseModal }}
+              clickClosedConversationModalFunc={
+                clickClosedConversationModalFunc
+              }
+              //...props}
+            />
+          </StyleContextProvider>
         )}
       </>
     );

@@ -63,9 +63,8 @@ export default function App() {
 
   const customActionDataExNdUi = {
     tel: '905301138326',
-    
   };
-
+  const integrationId = '24943652-7235-d2ce-ff39-3a0af91ec61e';
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>
@@ -130,43 +129,52 @@ export default function App() {
           sendConversationStart: true,
           tenant: 'Demo',
           projectName: 'MasterBankingDemo_1_0',
+          integrationId: integrationId,
           channel: 'Mobil',
           clientId: 'mobile-testing',
           enableNdUi: false,
           getResponseData: setResponse,
-          customActionData: JSON.stringify(customActionDataExNdUi)
+          customActionData: JSON.stringify(customActionDataExNdUi),
         }}
         customizeConfiguration={{
+          // Header
           headerColor: '#7f81ae',
           headerText: 'Knovvu',
+          // Bottom
           bottomColor: '#7f81ae',
           bottomInputText: 'Bottom input text..',
-          //bottomVoiceIcon: "<Cmp />",
-          //bottomSendIcon: "<Cmp />",
-          incomingIcon: {
+          // User MessageBox
+          userMessageBoxBackground: 'red',
+          userMessageBoxTextColor: 'black',
+          userMessageBoxIcon: {
             type: 'uri',
             value:
               'https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png',
           },
-          incomingText: '',
-          incomingTextColor: 'black',
-          outgoingIcon: {
+          userMessageBoxHeaderName: '',
+          userMessageBoxHeaderNameColor: 'white',
+          // ChatBot MessageBox
+          chatBotMessageBoxBackground: '#FCFBF7',
+          chatBotMessageBoxTextColor: 'black',
+          chatBotMessageIcon: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
           },
-          outgoingText: 'Knovvu',
-          outgoingTextColor: '#7f81ae',
-          messageColor: '#FCFBF7',
-          messageBoxColor: '#7f81ae',
-          //bodyColorOrImage: { type: 'image', value: 'https://i.pinimg.com/550x/4a/6f/59/4a6f59296f90c11d77744720ca10d1af.jpg' },
-          bodyColorOrImage: {type: 'color', value: '#7f81ae'},
-          firsIcon: {
+          chatBotMessageBoxHeaderName: 'Knovvu',
+          chatBotMessageBoxHeaderNameColor: '#7f81ae',
+          chatBotMessageBoxButtonBackground: '#7f81ae',
+          chatBotMessageBoxButtonTextColor: 'white',
+          // Chat Body
+          chatBody: {type: 'color', value: '#7f81ae'},
+          // Chat Start Button
+          chatStartButton: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
           },
-          firstColor: 'white',
-          firstSize: 70,
-          leftMessageBoxColor: 'white',
+          chatStartButtonBackground: 'white',
+          chatStartButtonBackgroundSize: 70,
+          chatStartButtonHide: false,
+          // Slider
           sliderMaximumTrackTintColor: 'gray',
           sliderThumbTintColor: 'blue',
           sliderMinimumTrackTintColor: 'pink',
@@ -178,7 +186,9 @@ export default function App() {
             type: 'image',
             value: require('../src/image/play2.png'),
           },
+          // Before Func
           beforeAudioClick: beforeAudioFunc,
+          // Close Modal
           closeModalSettings: {
             use: true,
             text: "Chat'ten çıkmak istediğinize emin misiniz ?",
