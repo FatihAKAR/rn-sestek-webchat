@@ -1,6 +1,15 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
-const StyleContext = createContext();
+interface contextType {
+  appStyle: any;
+  handleStyle: any;
+  getCssIntegration: any;
+}
+const StyleContext = createContext<contextType>({
+  appStyle: '',
+  handleStyle: '',
+  getCssIntegration: '',
+});
 
 const StyleContextProvider = (props: any) => {
   const [appStyle, setAppStyle] = useState<object>({});
@@ -116,7 +125,7 @@ const StyleContextProvider = (props: any) => {
     });
   };
 
-  const contextValue = {
+  const contextValue: contextType = {
     appStyle,
     handleStyle,
     getCssIntegration,

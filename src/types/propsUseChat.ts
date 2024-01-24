@@ -4,7 +4,7 @@ import type DefaultConfiguration from './propsDefaultConfiguration';
 export default interface PropsUseChat {
   url: string;
   defaultConfiguration: DefaultConfiguration;
-  messages: any[];
+  // messages: any[];
   sessionId: string;
   client: SignalRClient;
   rnfs: any;

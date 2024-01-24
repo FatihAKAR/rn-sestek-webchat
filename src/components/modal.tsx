@@ -3,12 +3,9 @@ import React, {
   useState,
   useImperativeHandle,
   useContext,
-  useCallback,
-  useMemo,
   useEffect,
 } from 'react';
 import {
-  Alert,
   Modal,
   View,
   ImageBackground,
@@ -23,23 +20,33 @@ import HeaderComponent from './header';
 import { styles } from './modal-style';
 import CloseModal from './closeModal';
 import { StyleContext } from '../context/StyleContext';
-
-export interface ModalCompRef {
-  messageList: any;
-}
+import { ModalCompRef } from '../types/components/ModalComponent';
 
 const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
   (props, ref) => {
+    const {
+      url,
+      defaultConfiguration,
+      sessionId,
+      client,
+      modules,
+      customizeConfiguration,
+      closeConversation,
+      closedModalManagment,
+      closeModal,
+      visible,
+      clickClosedConversationModalFunc,
+    } = props;
+
     const [inputData, setInputData] = useState<string>('');
     const changeInputData = (text: string) => setInputData(text);
 
     const [messageList, sendMessage, sendAudio] = useChat({
-      url: props?.url,
-      defaultConfiguration: props.defaultConfiguration,
-      messages: [],
-      sessionId: props.sessionId,
-      client: props.client,
-      rnfs: props.modules.RNFS,
+      url: url,
+      defaultConfiguration: defaultConfiguration,
+      sessionId: sessionId,
+      client: client,
+      rnfs: modules.RNFS,
     });
 
     useImperativeHandle(ref, () => ({
@@ -51,16 +58,16 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
 
     useEffect(() => {
       (async () => {
-        if (props.defaultConfiguration.integrationId) {
-          const css = await getCssIntegration(
-            props.defaultConfiguration.integrationId,
-            props.customizeConfiguration
+        if (defaultConfiguration.integrationId) {
+          await getCssIntegration(
+            defaultConfiguration.integrationId,
+            customizeConfiguration
           );
         } else {
           handleStyle(
-            props.customizeConfiguration,
-            props.defaultConfiguration.tenant,
-            props.defaultConfiguration.projectName
+            customizeConfiguration,
+            defaultConfiguration.tenant,
+            defaultConfiguration.projectName
           );
         }
       })();
@@ -70,16 +77,16 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
       <Modal
         animationType={'slide'}
         transparent={true}
-        visible={props.visible && Object.keys(appStyle).length > 0}
+        visible={visible && Object.keys(appStyle).length > 0}
         onRequestClose={() => {
-          props.closeModal();
+          closeModal();
         }}
       >
         <CloseModal
-          closeModal={props?.closedModalManagment?.closeModal}
-          setCloseModal={props?.closedModalManagment?.setCloseModal}
-          closeConversation={props?.closeConversation}
-          closeModalSettings={props?.customizeConfiguration?.closeModalSettings}
+          closeModal={closedModalManagment?.closeModal}
+          setCloseModal={closedModalManagment?.setCloseModal}
+          closeConversation={closeConversation}
+          closeModalSettings={customizeConfiguration?.closeModalSettings}
         />
 
         <KeyboardAvoidingView
@@ -96,10 +103,13 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
             ]}
           >
             <HeaderComponent
-              {...props}
+              closeModal={closeModal}
+              clickClosedConversationModalFunc={
+                clickClosedConversationModalFunc
+              }
               headerText={appStyle?.headerText || undefined}
-              hideIcon={props.customizeConfiguration.hideIcon}
-              closeIcon={props.customizeConfiguration.closeIcon}
+              hideIcon={customizeConfiguration.hideIcon}
+              closeIcon={customizeConfiguration.closeIcon}
             />
           </View>
           <View
@@ -118,8 +128,8 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
                 resizeMode="stretch"
               >
                 <BodyComponent
-                  modules={props.modules}
-                  customizeConfiguration={props.customizeConfiguration}
+                  modules={modules}
+                  customizeConfiguration={customizeConfiguration}
                   messageList={messageList}
                   changeInputData={changeInputData}
                   sendMessage={sendMessage}
@@ -128,8 +138,8 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
             )}
             {appStyle?.chatBody?.type != 'image' && (
               <BodyComponent
-                modules={props.modules}
-                customizeConfiguration={props.customizeConfiguration}
+                modules={modules}
+                customizeConfiguration={customizeConfiguration}
                 messageList={messageList}
                 changeInputData={changeInputData}
                 sendMessage={sendMessage}

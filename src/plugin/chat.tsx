@@ -4,72 +4,73 @@ import React, {
   useImperativeHandle,
   forwardRef,
   useRef,
-  useEffect,
 } from 'react';
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Modal,
-  Platform,
-  Text,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { GeneralManager, SignalRClient } from '../services';
 import ModalComponent, { ModalCompRef } from '../components/modal';
 import { ChatIcon } from '../image';
 import type { PropsChatModal } from '../types';
 import { StyleContextProvider } from '../context/StyleContext';
-
-export interface ChatModalRef {
-  triggerVisible: () => void;
-  startConversation: () => void;
-  endConversation: () => void;
-  conversationStatus: boolean;
-  messageList: any;
-}
+import { ChatModalProps } from '../types/plugin/ChatModalProps';
+import { ChatModalConstant } from '../constant/ChatModalConstant';
+import { styles } from '../styles/plugin/ChatStyle';
 
 let sessionId = GeneralManager.createUUID();
 let client = new SignalRClient(GeneralManager.getWebchatHost());
 
-export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
+console.log('sessionID : ', sessionId);
+
+export const ChatModal = forwardRef<ChatModalProps, PropsChatModal>(
   (props, ref) => {
-    if (props?.defaultConfiguration?.enableNdUi) {
+    const { defaultConfiguration, url, modules, customizeConfiguration } =
+      props;
+
+    const {
+      chatStartButtonBackground,
+      chatStartButtonBackgroundSize,
+      chatStartButton,
+      chatStartButtonHide,
+    } = customizeConfiguration;
+
+    // ! Artık nd ve knovvu ortamları eşit ikisinin de başında mobile prefix var
+    // ! durum değişirse diye eklendi
+    if (defaultConfiguration?.enableNdUi) {
       sessionId = 'Mobil' + sessionId;
-      props.defaultConfiguration.channel = 'NdUi';
+      defaultConfiguration.channel = 'NdUi';
     }
 
-    const [closeModal, setCloseModal] = useState<boolean>(false);
-
     const modalRef = useRef<ModalCompRef>(null);
+    const [closeModal, setCloseModal] = useState<boolean>(false);
     const [start, setStart] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
+
     const startConversation = () => {
       if (!start) {
         sessionId = GeneralManager.createUUID();
-        client = new SignalRClient(props?.url || '');
+        client = new SignalRClient(url || ChatModal.defaultProps?.url);
       }
       setStart(true);
       setVisible(true);
-      if (props.modules?.RNFS) {
-        let dirs = props.modules.RNFS.fs.dirs;
-        let folderPath = dirs.DocumentDir + '/sestek_bot_audio'; // cached folder.
-        props.modules?.RNFS.fs
+      if (modules?.RNFS) {
+        let dirs = modules.RNFS.fs.dirs;
+        let folderPath = dirs.DocumentDir + '/sestek_bot_audio';
+        modules?.RNFS.fs
           .mkdir(folderPath)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+          .then((res: string) => console.log(res))
+          .catch((err: string) => console.log(err));
       }
     };
 
     const endConversation = async () => {
       setStart(false);
       setVisible(false);
-      if (props.modules?.RNFS) {
-        let dirs = props.modules.RNFS.fs.dirs;
-        let folderPath = dirs.DocumentDir + '/sestek_bot_audio'; // cached folder.
-        props.modules.RNFS.fs
+      if (modules?.RNFS) {
+        let dirs = modules.RNFS.fs.dirs;
+        let folderPath = dirs.DocumentDir + '/sestek_bot_audio';
+        modules.RNFS.fs
           .unlink(folderPath)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+          .then((res: string) => console.log(res))
+          .catch((err: string) => console.log(err));
       }
     };
 
@@ -77,7 +78,6 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
       setCloseModal(true);
     };
 
-    const [visible, setVisible] = useState<boolean>(false);
     const triggerVisible = useCallback(() => {
       setVisible((old) => !old);
     }, [visible]);
@@ -92,24 +92,15 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
       endConversation: () => {
         endConversation();
       },
-      getAllMessages: () => {
-        return;
-      },
       conversationStatus: start,
       messageList: modalRef.current?.messageList,
-      responseData: modalRef.current?.responseData,
     }));
 
-    const {
-      chatStartButtonBackground,
-      chatStartButtonBackgroundSize,
-      chatStartButton,
-      chatStartButtonHide,
-    } = props.customizeConfiguration;
-
     return (
-      <>
-        {!chatStartButtonHide && (
+      <React.Fragment>
+        {chatStartButtonHide ? (
+          <React.Fragment></React.Fragment>
+        ) : (
           <View style={styles.mainContainer}>
             <TouchableOpacity
               style={[
@@ -138,10 +129,10 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
           <StyleContextProvider>
             <ModalComponent
               ref={modalRef}
-              url={props?.url || ''}
-              modules={props.modules}
-              customizeConfiguration={props.customizeConfiguration}
-              defaultConfiguration={props.defaultConfiguration}
+              url={url || ChatModal.defaultProps?.url!}
+              modules={modules}
+              customizeConfiguration={customizeConfiguration}
+              defaultConfiguration={defaultConfiguration}
               visible={visible}
               closeConversation={endConversation}
               closeModal={triggerVisible}
@@ -151,38 +142,14 @@ export const ChatModal = forwardRef<ChatModalRef, PropsChatModal>(
               clickClosedConversationModalFunc={
                 clickClosedConversationModalFunc
               }
-              //...props}
             />
           </StyleContextProvider>
         )}
-      </>
+      </React.Fragment>
     );
   }
 );
 
 ChatModal.defaultProps = {
-  //url: 'http://192.168.20.72:55022/chathub'
-  //  url: 'https://stable.web.cai.demo.sestek.com/webchat/chathub',
-  //url: 'https://nd-test-webchat.sestek.com/chathub'
-  // url:'https://eu.va.knovvu.com/webchat/chathub'
-  url: 'https://igavassistwebchat.igairport.aero:6443/chathub',
+  url: ChatModalConstant.knovvu,
 };
-
-//`https://nd-test-webchat.sestek.com/chathub`;
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flexDirection: 'column',
-    zIndex: 2,
-    flex: 1,
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    bottom: 10,
-    right: 10,
-  },
-  floatBottomRight: {
-    backgroundColor: GeneralManager.getColorAndText().backgroundColor,
-    padding: 0,
-    borderRadius: 50,
-  },
-});

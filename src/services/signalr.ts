@@ -2,12 +2,13 @@ import * as signalR from '@aspnet/signalr';
 
 class SignalRClient {
   connected: boolean;
-  newUrl: string;
+  newUrl?: string;
   connection: any;
   onMessageFunc!: (d: any, m: any) => void;
   onTyping?: (d: any, m: any) => void;
 
-  constructor(url: string) {
+  constructor(url?: string) {
+    console.log('url : ', url);
     this.connected = false;
     this.newUrl = url;
     this.onMessageFunc;
@@ -16,7 +17,7 @@ class SignalRClient {
   buildConnection = async () => {
     this.connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Error)
-      .withUrl(this.newUrl)
+      .withUrl(this.newUrl ?? '')
       .build();
 
     this.connection.onerror = () => {

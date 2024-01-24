@@ -30,8 +30,9 @@ export default function App() {
   const setResponse = (value: any) => {
     setResponseData(value);
   };
+
   useEffect(() => {
-    console.log(responseData);
+    console.log(modalRef.current.responseData);
   }, [responseData]);
 
   const pressTriggerVisible = () => {
@@ -115,7 +116,7 @@ export default function App() {
       <FlashMessage position="top" />
       {/* @ts-expect-error Server Component */}
       <ChatModal
-        url={`https://eu.va.knovvu.com/webchat/chathub`}
+        url={`https://va.tr.knovvu.com/webchat/chathub`}
         //url={`https://nd-test-webchat.sestek.com/chathub`}
         modules={{
           AudioRecorderPlayer: AudioRecorderPlayer,
@@ -127,12 +128,12 @@ export default function App() {
         ref={modalRef}
         defaultConfiguration={{
           sendConversationStart: true,
-          tenant: 'Demo',
-          projectName: 'MasterBankingDemo_1_0',
+          tenant: 'tiklagelsinva',
+          projectName: 'Tikla_Gelsin',
           integrationId: integrationId,
           channel: 'Mobil',
           clientId: 'mobile-testing',
-          enableNdUi: false,
+          enableNdUi: true,
           getResponseData: setResponse,
           customActionData: JSON.stringify(customActionDataExNdUi),
         }}

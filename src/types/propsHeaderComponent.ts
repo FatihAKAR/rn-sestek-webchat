@@ -1,6 +1,6 @@
 export default interface PropsHeaderComponent {
-  closeModal: () => void;
-  clickClosedConversationModalFunc: () => void;
+  closeModal: Function;
+  clickClosedConversationModalFunc: Function;
   headerText?: string;
   closeIcon?: any;
   hideIcon?: any;
