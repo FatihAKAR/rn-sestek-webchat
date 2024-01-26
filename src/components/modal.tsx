@@ -5,13 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import {
-  Modal,
-  View,
-  ImageBackground,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { Modal, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { useChat } from '../plugin/useChat';
 import type { PropsModalComponent } from '../types';
 import BodyComponent from './body';
@@ -21,6 +15,7 @@ import { styles } from './modal-style';
 import CloseModal from './closeModal';
 import { StyleContext } from '../context/StyleContext';
 import { ModalCompRef } from '../types/components/ModalComponent';
+import GenerateBody from './body/GenerateBody';
 
 const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
   (props, ref) => {
@@ -46,7 +41,7 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
       defaultConfiguration: defaultConfiguration,
       sessionId: sessionId,
       client: client,
-      rnfs: modules.RNFS,
+      rnfs: modules?.RNFS,
     });
 
     useImperativeHandle(ref, () => ({
@@ -58,18 +53,24 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
 
     useEffect(() => {
       (async () => {
-        if (defaultConfiguration.integrationId) {
-          await getCssIntegration(
-            defaultConfiguration.integrationId,
-            customizeConfiguration
-          );
-        } else {
-          handleStyle(
-            customizeConfiguration,
-            defaultConfiguration.tenant,
-            defaultConfiguration.projectName
-          );
-        }
+        // if (defaultConfiguration.integrationId) {
+        //   await getCssIntegration(
+        //     defaultConfiguration.integrationId,
+        //     customizeConfiguration
+        //   );
+        // } else {
+        //   handleStyle(
+        //     customizeConfiguration,
+        //     defaultConfiguration.tenant,
+        //     defaultConfiguration.projectName
+        //   );
+        // }
+
+        handleStyle(
+          customizeConfiguration,
+          defaultConfiguration?.tenant,
+          defaultConfiguration?.projectName
+        );
       })();
     }, []);
 
@@ -79,7 +80,7 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
         transparent={true}
         visible={visible && Object.keys(appStyle).length > 0}
         onRequestClose={() => {
-          closeModal();
+          closeModal && closeModal();
         }}
       >
         <CloseModal
@@ -108,8 +109,8 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
                 clickClosedConversationModalFunc
               }
               headerText={appStyle?.headerText || undefined}
-              hideIcon={customizeConfiguration.hideIcon}
-              closeIcon={customizeConfiguration.closeIcon}
+              hideIcon={customizeConfiguration?.headerHideIcon}
+              closeIcon={customizeConfiguration?.headerCloseIcon}
             />
           </View>
           <View
@@ -121,12 +122,8 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
                   : '#fff',
             }}
           >
-            {appStyle?.chatBody?.type == 'image' && (
-              <ImageBackground
-                source={{ uri: appStyle?.chatBody?.value }}
-                style={{ width: '100%', height: '100%' }}
-                resizeMode="stretch"
-              >
+            <GenerateBody
+              BodyComponent={
                 <BodyComponent
                   modules={modules}
                   customizeConfiguration={customizeConfiguration}
@@ -134,17 +131,8 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
                   changeInputData={changeInputData}
                   sendMessage={sendMessage}
                 />
-              </ImageBackground>
-            )}
-            {appStyle?.chatBody?.type != 'image' && (
-              <BodyComponent
-                modules={modules}
-                customizeConfiguration={customizeConfiguration}
-                messageList={messageList}
-                changeInputData={changeInputData}
-                sendMessage={sendMessage}
-              />
-            )}
+              }
+            />
           </View>
           <View
             style={[
@@ -155,9 +143,10 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
             ]}
           >
             <FooterComponent
-              {...props}
+              modules={modules}
               inputData={inputData}
               changeInputData={changeInputData}
+              customizeConfiguration={customizeConfiguration}
               sendMessage={sendMessage}
               sendAudio={sendAudio}
               placeholderText={appStyle?.bottomInputText}

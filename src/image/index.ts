@@ -3,6 +3,7 @@ const MinusIcon = require('./minus.png');
 const MultiplyIcon = require('./multiply.png');
 const RobotIcon = require('./robot.png');
 const SendIcon = require('./send.png');
+const SendIconWhite = require('./sendwhite.png');
 const VoiceIcon = require('./voice.png');
 const RecordInIcon = require('./record_in.png');
 const RecordOutIcon = require('./record_out.png');
@@ -13,18 +14,18 @@ const PauseIcon2 = require('./pause2.png');
 const RecordDisable = require('./record_disable.png');
 
 export {
-    ChatIcon,
-    MinusIcon,
-    MultiplyIcon,
-    RobotIcon,
-    SendIcon,
-    VoiceIcon,
-    RecordInIcon,
-    RecordOutIcon,
-    PlayIcon,
-    PauseIcon,
-    PlayIcon2,
-    PauseIcon2,
-    RecordDisable
-    
+  ChatIcon,
+  MinusIcon,
+  MultiplyIcon,
+  RobotIcon,
+  SendIcon,
+  VoiceIcon,
+  RecordInIcon,
+  RecordOutIcon,
+  PlayIcon,
+  PauseIcon,
+  PlayIcon2,
+  PauseIcon2,
+  RecordDisable,
+  SendIconWhite,
 };

@@ -19,34 +19,41 @@ const StyleContextProvider = (props: any) => {
     projectName: string
   ) => {
     setAppStyle({
-      headerText: propsCustomizeConfiguration.headerText,
-      bottomColor: propsCustomizeConfiguration.bottomColor,
-      headerColor: propsCustomizeConfiguration.headerColor,
-      chatBody: { ...propsCustomizeConfiguration.chatBody },
+      headerText: propsCustomizeConfiguration?.headerText,
+      headerTextColor: propsCustomizeConfiguration?.headerTextColor,
+      bottomColor: propsCustomizeConfiguration?.bottomColor,
+      bottomInputSendButtonColor:
+        propsCustomizeConfiguration?.bottomInputSendButtonColor,
+      bottomInputBorderColor:
+        propsCustomizeConfiguration?.bottomInputBorderColor,
+      headerColor: propsCustomizeConfiguration?.headerColor,
+      chatBody: { ...propsCustomizeConfiguration?.chatBody },
       chatBotMessageBoxTextColor:
-        propsCustomizeConfiguration.chatBotMessageBoxTextColor,
+        propsCustomizeConfiguration?.chatBotMessageBoxTextColor,
       chatBotMessageIcon: {
-        ...propsCustomizeConfiguration.chatBotMessageIcon,
+        ...propsCustomizeConfiguration?.chatBotMessageIcon,
       },
       chatBotMessageBoxBackground:
-        propsCustomizeConfiguration.chatBotMessageBoxBackground,
+        propsCustomizeConfiguration?.chatBotMessageBoxBackground,
       userMessageBoxTextColor:
-        propsCustomizeConfiguration.userMessageBoxTextColor,
+        propsCustomizeConfiguration?.userMessageBoxTextColor,
       userMessageBoxIcon: {
-        ...propsCustomizeConfiguration.userMessageBoxIcon,
+        ...propsCustomizeConfiguration?.userMessageBoxIcon,
       },
       userMessageBoxBackground:
-        propsCustomizeConfiguration.userMessageBoxBackground,
+        propsCustomizeConfiguration?.userMessageBoxBackground,
       chatStartButtonBackground:
-        propsCustomizeConfiguration.chatStartButtonBackground,
-      bottomInputText: propsCustomizeConfiguration.bottomInputText,
+        propsCustomizeConfiguration?.chatStartButtonBackground,
+      bottomInputText: propsCustomizeConfiguration?.bottomInputText,
       closeModalSettings: {
-        ...propsCustomizeConfiguration.closeModalSettings,
+        ...propsCustomizeConfiguration?.closeModalSettings,
       },
       tenant: tenant,
       projectName: projectName,
       chatBotMessageBoxButtonBackground:
-        propsCustomizeConfiguration.chatBotMessageBoxButtonBackground,
+        propsCustomizeConfiguration?.chatBotMessageBoxButtonBackground,
+      chatBotMessageBoxButtonBorderColor:
+        propsCustomizeConfiguration?.chatBotMessageBoxButtonBorderColor,
       chatBotMessageBoxButtonTextColor:
         propsCustomizeConfiguration?.chatBotMessageBoxButtonTextColor,
     });
@@ -63,6 +70,8 @@ const StyleContextProvider = (props: any) => {
       }
     );
     const json = await response.json();
+    console.log(json);
+
     const chatAvatatUri = json?.agent?.avatar?.split('"')[3];
     const userAvatatUri = json?.client?.avatar?.split('"')[3];
 

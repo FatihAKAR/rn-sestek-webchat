@@ -139,34 +139,45 @@ export default function App() {
         }}
         customizeConfiguration={{
           // Header
-          headerColor: '#7f81ae',
+          headerColor: '#7743DB',
           headerText: 'Knovvu',
+          headerTextColor: 'white',
+          headerHideIcon: {
+            type: 'component',
+            value: require('./src/images/hide.png'),
+          },
+          headerCloseIcon: {
+            type: 'component',
+            value: require('./src/images/close.png'),
+          },
           // Bottom
-          bottomColor: '#7f81ae',
+          bottomColor: 'white',
           bottomInputText: 'Bottom input text..',
+          bottomInputBorderColor: '#d5d5d5',
+          bottomInputSendButtonColor: '#7743DB',
           // User MessageBox
-          userMessageBoxBackground: 'red',
-          userMessageBoxTextColor: 'black',
+          userMessageBoxBackground: '#863CEB',
+          userMessageBoxTextColor: 'white',
           userMessageBoxIcon: {
             type: 'uri',
-            value:
-              'https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png',
+            value: '',
           },
           userMessageBoxHeaderName: '',
           userMessageBoxHeaderNameColor: 'white',
           // ChatBot MessageBox
-          chatBotMessageBoxBackground: '#FCFBF7',
+          chatBotMessageBoxBackground: '#EFEFEF',
           chatBotMessageBoxTextColor: 'black',
           chatBotMessageIcon: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
           },
           chatBotMessageBoxHeaderName: 'Knovvu',
-          chatBotMessageBoxHeaderNameColor: '#7f81ae',
-          chatBotMessageBoxButtonBackground: '#7f81ae',
-          chatBotMessageBoxButtonTextColor: 'white',
+          chatBotMessageBoxHeaderNameColor: 'black',
+          chatBotMessageBoxButtonBackground: 'white',
+          chatBotMessageBoxButtonTextColor: 'black',
+          chatBotMessageBoxButtonBorderColor: '#863CEB',
           // Chat Body
-          chatBody: {type: 'color', value: '#7f81ae'},
+          chatBody: {type: 'color', value: 'white'},
           // Chat Start Button
           chatStartButton: {
             type: 'component',

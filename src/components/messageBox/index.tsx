@@ -24,7 +24,7 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const changeActiveSlide = (number: number) => setActiveSlide(number);
   const { appStyle } = useContext(StyleContext);
-  console.log(props.position);
+
   var positionCls = [
     styles.rceMbox,
     props.position === 'right' && styles.rceMboxRight,
@@ -33,6 +33,7 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
         props.position != 'right'
           ? appStyle?.userMessageBoxBackground
           : appStyle?.chatBotMessageBoxBackground,
+      minWidth: 100,
     },
   ];
   var thatAbsoluteTime =
@@ -98,6 +99,11 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
       }
     }
   }, []);
+
+  const getTimeGenerate = (props: any) => {
+    const date = new Date(props?.timestamp);
+    return `${date.getHours()}:${date.getMinutes()}`;
+  };
 
   const renderItemMessage = () => {
     return (
@@ -245,6 +251,10 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
                           appStyle?.chatBotMessageBoxButtonBackground,
                       }
                     : {},
+                  {
+                    borderWidth: 1,
+                    borderColor: appStyle?.chatBotMessageBoxButtonBorderColor,
+                  },
                 ]}
               >
                 <Text
@@ -392,14 +402,24 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
   };
 
   const renderTyping = () => {
-    return <TypingAnimation></TypingAnimation>;
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <TypingAnimation></TypingAnimation>
+      </View>
+    );
   };
   return (
     <View style={{ ...styles.rceContainerMbox, paddingTop: 15 }}>
       {props.type === 'system' ? null : (
         <View style={[positionCls]}>
-          <View style={styles.rceMboxBody}>
-            {(props.title || props.avatar) && (
+          <View style={[styles.rceMboxBody]}>
+            {console.log('fifi : ', props.customizeConfiguration)}
+            {(props.title || props.avatar) && props.position !== 'left' && (
               <View
                 style={[
                   styles.rceMboxTitle,
@@ -466,13 +486,15 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
                       : appStyle?.chatBotMessageBoxTextColor,
                 }}
               >
-                {props.activity?.timestamp &&
+                {/* {props.activity?.timestamp &&
                   (props.dateString ||
                     `${new Date(
                       props.activity?.timestamp
                     ).toLocaleDateString()} ${new Date(
                       props.activity?.timestamp
-                    ).toLocaleTimeString()}`)}
+                    ).toLocaleTimeString()}`)} */}
+                {(props.activity?.timestamp || props.dateString) &&
+                  getTimeGenerate({ timestamp: props.activity.timestamp })}
               </Text>
             </View>
           </View>

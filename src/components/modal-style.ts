@@ -22,4 +22,8 @@ export const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: Platform.OS === 'android' ? 10 : 25,
   },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
+  },
 });

@@ -13,7 +13,7 @@ import type { PropsChatModal } from '../types';
 import { StyleContextProvider } from '../context/StyleContext';
 import { ChatModalProps } from '../types/plugin/ChatModalProps';
 import { ChatModalConstant } from '../constant/ChatModalConstant';
-import { styles } from '../styles/plugin/ChatStyle';
+import { styles } from './chat-styles';
 
 let sessionId = GeneralManager.createUUID();
 let client = new SignalRClient(GeneralManager.getWebchatHost());
@@ -52,7 +52,7 @@ export const ChatModal = forwardRef<ChatModalProps, PropsChatModal>(
       setStart(true);
       setVisible(true);
       if (modules?.RNFS) {
-        let dirs = modules.RNFS.fs.dirs;
+        let dirs = modules?.RNFS.fs.dirs;
         let folderPath = dirs.DocumentDir + '/sestek_bot_audio';
         modules?.RNFS.fs
           .mkdir(folderPath)
@@ -65,9 +65,9 @@ export const ChatModal = forwardRef<ChatModalProps, PropsChatModal>(
       setStart(false);
       setVisible(false);
       if (modules?.RNFS) {
-        let dirs = modules.RNFS.fs.dirs;
+        let dirs = modules?.RNFS.fs.dirs;
         let folderPath = dirs.DocumentDir + '/sestek_bot_audio';
-        modules.RNFS.fs
+        modules?.RNFS.fs
           .unlink(folderPath)
           .then((res: string) => console.log(res))
           .catch((err: string) => console.log(err));

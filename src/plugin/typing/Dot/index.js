@@ -1,16 +1,16 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
-import styles from "./styles";
+import styles from './styles';
 
 const getStyles = ({ x, y, radius, dotColor }) => ({
-  left: x,
+  left: x-13,
   top: y,
   width: radius * 2,
   height: radius * 2,
   borderRadius: radius,
-  backgroundColor: dotColor
+  backgroundColor: dotColor,
 });
 
 const Dot = (props) => (
@@ -22,7 +22,7 @@ Dot.propTypes = {
   y: PropTypes.number,
   radius: PropTypes.number,
   dotStyles: PropTypes.object,
-  dotColor: PropTypes.string
+  dotColor: PropTypes.string,
 };
 
 export default Dot;

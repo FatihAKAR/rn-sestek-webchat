@@ -12,7 +12,18 @@ const useChat = ({
   const [messageList, setMessageList] = useState<any>([]);
 
   const addMessageList = (message: any) => {
-    setMessageList((messages: any) => [...messages, message]);
+    setMessageList((messages: any) => {
+      if (messages?.length > 0) {
+        const messagesLength = messages.length;
+        const lastElement = messages[messagesLength - 1];
+        if (lastElement?.type === 'typing') {
+          messages.pop();
+          return [...messages, message];
+        }
+        return [...messages, message];
+      }
+      return [message];
+    });
   };
   const setResponseFunc = (customAction: any, customActionData: any) => {
     getResponseData({ customAction, customActionData });
@@ -22,11 +33,6 @@ const useChat = ({
     if (!client.connected) {
       initSocket();
     }
-    setInterval(() => {
-      setMessageList((messages: any) =>
-        messages.filter((x: any) => x?.type !== 'typing')
-      );
-    }, 15000);
   }, []);
 
   const initSocket = async () => {
@@ -46,16 +52,12 @@ const useChat = ({
 
   const funcTyping = () => {
     client.ontyping((details: any, message: any) => {
-      // console.log('type-details : ', details, '-type-message :', message);
       if (message === 'typing') {
-        console.log('bbbbb');
         setMessageList((messages: any) => [
           ...messages,
           { type: 'typing', message: 'xxxxx' },
         ]);
       } else {
-        // console.log('type-details : ', details, '-type-message :', message);
-        console.log('aaaaa');
         setMessageList((messages: any) =>
           messages.filter((x: any) => x?.type !== 'typing')
         );
@@ -65,7 +67,7 @@ const useChat = ({
 
   const attachClientOnMessage = () => {
     client.onmessage((details: any, message: any) => {
-      // console.log('details : ', details, '- message :', message);
+      console.log('details : ', details, '- message :', message);
       const messageBody =
         typeof message === 'string' ? JSON.parse(message) : message;
       if (messageBody?.channelData) {
@@ -112,7 +114,6 @@ const useChat = ({
           });
         }
       } else {
-        console.log('aa :', message);
         addMessageList(messageBody);
       }
     });

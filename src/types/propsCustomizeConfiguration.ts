@@ -1,10 +1,15 @@
 export default interface PropsCustomizeConfiguration {
   headerColor?: string;
   headerText?: string;
+  headerTextColor?: string;
+  headerHideIcon?: IconType;
+  headerCloseIcon?: IconType;
   bottomColor?: string;
   bottomInputText?: string;
+  bottomInputBorderColor?: string;
   bottomVoiceIcon?: IconType;
   bottomSendIcon?: IconType;
+  bottomInputSendButtonColor?: string;
   userMessageBoxIcon?: IconType;
   userMessageBoxTextColor?: string;
   userMessageBoxHeaderName?: string;
@@ -15,14 +20,13 @@ export default interface PropsCustomizeConfiguration {
   chatBotMessageBoxHeaderNameColor?: string;
   chatBotMessageBoxBackground?: string;
   chatBotMessageBoxButtonBackground?: string;
+  chatBotMessageBoxButtonBorderColor?: string;
   chatBotMessageBoxButtonTextColor?: string;
   chatBody?: BodyColorOrImageType;
   chatStartButtonHide?: boolean;
   chatStartButton?: IconType;
   chatStartButtonBackground?: string;
   chatStartButtonBackgroundSize?: number;
-  closeIcon?: any;
-  hideIcon?: any;
   userMessageBoxBackground?: string;
   sliderMinimumTrackTintColor?: string;
   sliderMaximumTrackTintColor?: string;
