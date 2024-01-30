@@ -132,7 +132,7 @@ export default function App() {
           projectName: 'MasterBankingDemo_1_0',
           channel: 'Mobil',
           clientId: 'mobile-testing',
-          enableNdUi: false,
+          enableNdUi: true,
           getResponseData: setResponse,
           customActionData: JSON.stringify(customActionDataExNdUi)
         }}
