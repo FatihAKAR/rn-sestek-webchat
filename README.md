@@ -1,7 +1,10 @@
 # rn-sestek-webchat
 
 
-![Adsız tasarım](https://github.com/sestek/rn-sestek-webchat/assets/54579230/a6c0cee3-0711-4d3b-affd-1080950cd82c)
+
+ <img src="https://github.com/sestek/rn-sestek-webchat/assets/54579230/a6c0cee3-0711-4d3b-affd-1080950cd82c" width="300" height="571" />
+ <img src="https://github.com/sestek/rn-sestek-webchat/assets/54579230/30a4e24a-558e-4206-90c9-bcce8920d831" width="300" height="571" />
+ <img src="https://github.com/sestek/rn-sestek-webchat/assets/54579230/e845fa51-8736-452d-b541-9a74367f4876" width="300" height="571" />
 
 
 ## Install
@@ -10,26 +13,35 @@
 npm install rn-sestek-webchat --save
 ```
 
-#### Step 1: If you want to send audio you have to follow the steps below
-
+###  If you want to send and listen audio you have to follow the steps below
+##### Step 1: Install react-native-audio-recorder-player && Install react-native-audio-record
 ```
 npm install react-native-audio-recorder-player@3.4.0
-```
-
-To record and send audio, you need to install the package above and [click this link](https://www.npmjs.com/package/react-native-audio-recorder-player) to make the necessary integrations.
-
-#### Step 2: Install react-native-fetch-blob and react-native-audio-record
-
-```
-npm i --save react-native-fetch-blob@0.10.8
 ```
 
 ```
 npm i --save  react-native-audio-record@0.2.2
 ```
 
+- To record and " listen " audio, you need to install the package above and [click this link](https://www.npmjs.com/package/react-native-audio-recorder-player) to make the necessary integrations.
+- To record and "send " audio, you need to install the package above and [click this link](https://www.npmjs.com/package/react-native-audio-record) to make the necessary integrations.
+
+##### Step 2: Install react-native-fetch-blob
+
+```
+npm i --save react-native-fetch-blob@0.10.8
+```
+
 If you want to send audio, you must also install the "react-native-fetch-blob" package. Because it is needed to keep the recorded audio in the cache and listen again.
 You can follow the [link](https://www.npmjs.com/package/react-native-fetch-blob) below to integrate
+
+##### Step 3: Install react-native-slider
+
+```
+npm i --save @miblanchard/react-native-slider
+```
+
+If you use to slider, you must also install the "@miblanchard/react-native-slider" package. You can follow the [link](https://www.npmjs.com/package/@miblanchard/react-native-slider) below to integrate
 
 ## Usage
 
@@ -37,22 +49,78 @@ You may have a general understanding of how it works with the following snippet.
 
 ```javascript
 import { ChatModal, ChatModalRef } from 'rn-sestek-webchat';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player'; //Required package to listen to audio files
 import RNFetchBlob from 'react-native-fetch-blob'; //Required package to listen to audio files
 import AudioRecord from 'react-native-audio-record'; //Required package to send audio files as waw
+import AudioRecord from 'react-native-audio-record'; //Required package to send audio files as waw
 
-const modalRef = useRef < ChatModalRef > null;
-const customActionDataEx = {
-  tel: '1111111111111',
+const modalRef = useRef<ChatModalRef>(null);
+
+const pressStartConversation = () => {
+    modalRef.current?.startConversation();
+}; // open chat wherever you want
+
+const pressEndConversation = () => {
+    if (!modalRef.current?.conversationStatus) {
+      showMessage({
+        backgroundColor: '#7f81ae',
+        description: 'The conversation has already ended.',
+        message: 'Warning',
+      });
+    }
+    modalRef.current?.endConversation();
+}; // stop chat anywhere you want
+
+// capture event from chat
+const [responseData, setResponseData] = useState<any>({});
+  const setResponse = (value: any) => {
+    setResponseData(value);
 };
-const [responseData, setResponseData] = useState < any > {};
-const setResponse = (value: any) => {
-  setResponseData(value);
-};
+
 useEffect(() => {
-  console.log(responseData);
+    console.log('response event : ', modalRef.current.responseData);
 }, [responseData]);
-<ChatModal
+
+const pressTriggerVisible = () => {
+    if (!modalRef.current?.conversationStatus) {
+      showMessage({
+        backgroundColor: '#7f81ae',
+        description: 'First you need to start the conversation.',
+        message: 'Warning',
+      });
+      return;
+    }
+    modalRef.current?.triggerVisible();
+}; // hide chat anywhere you want
+
+const pressGetMessageList = () => {
+    const data = modalRef.current?.messageList;
+    console.log(JSON.stringify(data));
+}; // conversation history
+
+const permissionAudioCheck = async () => {
+  return new Promise<void>((resolve, reject) => {
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      ).then(res => {
+        if (res === PermissionsAndroid.RESULTS.GRANTED) {
+          resolve();
+        }
+      });
+    } else {
+      resolve();
+    }
+  });
+}; // example check audio permission controller for android
+
+
+const customActionDataExample = {
+    tel: '900000000000',
+}; // send webchat custom action data
+
+
+ <ChatModal
   url={`https://eu.va.knovvu.com/webchat/chathub`}
   modules={{
     AudioRecorderPlayer: AudioRecorderPlayer,
@@ -66,43 +134,53 @@ useEffect(() => {
     sendConversationStart: true,
     tenant: 'Demo',
     projectName: 'MasterBankingDemo_1_0',
-    integrationId: integrationId, //It allows you to get automatic CSS from the eu.va environment when the integrationId prop is sent.
     channel: 'Mobil',
     clientId: 'mobile-testing',
-    enableNdUi: false,
+    enableNdUi: true,
     getResponseData: setResponse,
-    customActionData: JSON.stringify(customActionDataEx), //To send the desired customActionData
+    customActionData: JSON.stringify(customActionDataExample),
   }}
   customizeConfiguration={{
     // Header
-    headerColor: '#7f81ae',
+    headerColor: '#7743DB',
     headerText: 'Knovvu',
+    headerTextColor: 'white',
+    headerHideIcon: {
+      type: 'component',
+      value: require('./src/images/hide.png'),
+    },
+    headerCloseIcon: {
+      type: 'component',
+      value: require('./src/images/close.png'),
+    },
     // Bottom
-    bottomColor: '#7f81ae',
+    bottomColor: 'white',
     bottomInputText: 'Bottom input text..',
+    bottomInputBorderColor: '#d5d5d5',
+    bottomInputSendButtonColor: '#7743DB',
     // User MessageBox
-    userMessageBoxBackground: 'red',
-    userMessageBoxTextColor: 'black',
+    userMessageBoxBackground: '#863CEB',
+    userMessageBoxTextColor: 'white',
     userMessageBoxIcon: {
       type: 'uri',
-      value:
-        'https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png',
+      value: '',
     },
     userMessageBoxHeaderName: '',
     userMessageBoxHeaderNameColor: 'white',
     // ChatBot MessageBox
-    chatBotMessageBoxBackground: '#FCFBF7',
+    chatBotMessageBoxBackground: '#EFEFEF',
     chatBotMessageBoxTextColor: 'black',
     chatBotMessageIcon: {
       type: 'component',
       value: require('./src/images/knovvu_logo.png'),
     },
     chatBotMessageBoxHeaderName: 'Knovvu',
-    chatBotMessageBoxHeaderNameColor: '#7f81ae',
-    chatBotMessageBoxButtonBackground: '#7f81ae',
-    chatBotMessageBoxButtonTextColor: 'white',
+    chatBotMessageBoxHeaderNameColor: 'black',
+    chatBotMessageBoxButtonBackground: 'white',
+    chatBotMessageBoxButtonTextColor: 'black',
+    chatBotMessageBoxButtonBorderColor: '#863CEB',
     // Chat Body
-    chatBody: { type: 'color', value: '#7f81ae' },
+    chatBody: {type: 'color', value: 'white'},
     // Chat Start Button
     chatStartButton: {
       type: 'component',
@@ -112,19 +190,19 @@ useEffect(() => {
     chatStartButtonBackgroundSize: 70,
     chatStartButtonHide: false,
     // Slider
-    sliderMaximumTrackTintColor: 'gray',
-    sliderThumbTintColor: 'blue',
-    sliderMinimumTrackTintColor: 'pink',
+    sliderMaximumTrackTintColor: 'white',
+    sliderThumbTintColor: '#C3ACD0',
+    sliderMinimumTrackTintColor: '#C3ACD0',
     sliderPauseImage: {
       type: 'image',
-      value: require('../src/image/pause2.png'),
+      value: require('../src/image/pause-audio.png'),
     },
     sliderPlayImage: {
       type: 'image',
-      value: require('../src/image/play2.png'),
+      value: require('../src/image/play-audio.png'),
     },
     // Before Func
-    beforeAudioClick: beforeAudioFunc,
+    permissionAudioCheck: permissionAudioCheck,
     // Close Modal
     closeModalSettings: {
       use: true,
@@ -135,36 +213,19 @@ useEffect(() => {
         yesButton: {
           text: 'Evet',
           textColor: 'white',
-          background: '#7f81ae',
+          background: '#863CEB',
           borderColor: 'transparent',
         },
         noButton: {
           text: 'Hayır',
           textColor: 'black',
           background: 'transparent',
-          borderColor: 'black',
+          borderColor: '#863CEB',
         },
       },
     },
-    //bottomVoiceIcon: "<Cmp />",
-    //bottomSendIcon: "<Cmp />",
   }}
-/>;
-```
-
-If you want to do customized operations such as opening and closing the window, message data, you can do more detailed work with **useRef**.
-You can see a small piece of code for example usage below.
-
-```javascript
-const modalRef = useRef < ChatModalRef > null;
-
-const pressAnotherButton1 = () => {
-  const data = modalRef.current?.messageList;
-  console.log(JSON.stringify(data));
-};
-const pressAnotherButton2 = () => {
-  modalRef.current?.startConversation();
-};
+/>
 ```
 
 For other additional information, we have created a document that you can use in the table below.
@@ -176,27 +237,4 @@ For other additional information, we have created a document that you can use in
 | triggerVisible     | void    | Function that opens and closes the modal screen after the chat starts and continues the conversation from where it left off. |
 | messageList        | any     | Returns the active chat history.                                                                                             |
 | conversationStatus | boolean | Indicates whether there is an active conversation or not.                                                                    |
-| getResponseData    | void    | It is used to get customAction and customActionData in each incoming message.                                                |
 
-
-When you use integrationId as props, the following values are automatically prepared in the customizeConfiguration field.
-
-```javascript
-	customizeConfiguration: {
-      headerText,
-      bottomColor,
-      headerColor,
-      chatBody,
-      chatBotMessageBoxTextColor,
-      chatBotMessageIcon,
-      chatBotMessageBoxBackground,
-      userMessageBoxTextColor,
-      userMessageBoxIcon,
-      userMessageBoxBackground,
-      chatStartButtonBackground,
-      bottomInputText,
-      closeModalSettings,
-      chatBotMessageBoxButtonBackground,
-      chatBotMessageBoxButtonTextColor,
-    }
-```
