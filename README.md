@@ -1,12 +1,8 @@
 # rn-sestek-webchat
 
 
-![Adsız tasarım](https://github.com/sestek/rn-sestek-webchat/assets/54579230/3dc081b5-cf51-47a2-beb1-59d0e6d6660c)
+![Adsız tasarım](https://github.com/sestek/rn-sestek-webchat/assets/54579230/a6c0cee3-0711-4d3b-affd-1080950cd82c)
 
-
-
-
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/52356400/165738752-cd7f55a2-0c90-47b5-bad0-ad7b56cc2103.gif)
 
 ## Install
 
