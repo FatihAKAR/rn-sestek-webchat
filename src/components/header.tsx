@@ -12,10 +12,12 @@ const HeaderComponent: FC<PropsHeaderComponent> = (props) => {
     clickClosedConversationModalFunc,
     closeModal,
     headerText,
+    closeModalStatus,
+    closeConversation,
   } = props;
   const { appStyle } = useContext(StyleContext);
   return (
-    <View style={styles.headerConatiner}>
+    <View style={styles.headerContainer}>
       <View style={styles.headerContainer}>
         <Text style={[styles.headerText, { color: appStyle?.headerTextColor }]}>
           {headerText ?? HeaderComponent.defaultProps?.headerText!}
@@ -29,7 +31,13 @@ const HeaderComponent: FC<PropsHeaderComponent> = (props) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => clickClosedConversationModalFunc()}
+        onPress={() => {
+          if (closeModalStatus) {
+            clickClosedConversationModalFunc();
+          } else {
+            closeConversation();
+          }
+        }}
         style={styles.center}
       >
         {closeIcon ? (

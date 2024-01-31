@@ -8,7 +8,6 @@ class SignalRClient {
   onTyping?: (d: any, m: any) => void;
 
   constructor(url?: string) {
-    console.log('url : ', url);
     this.connected = false;
     this.newUrl = url;
     this.onMessageFunc;
@@ -60,9 +59,7 @@ class SignalRClient {
   };
 
   receiveMessage = async () => {
-    await this.connection.on('ReceiveMessage', (message: any) => {
-      /*console.log(message)*/
-    });
+    await this.connection.on('ReceiveMessage', (message: any) => {});
   };
 
   reconnectAsync = async () => {

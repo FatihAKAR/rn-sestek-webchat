@@ -72,7 +72,6 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
       if (props.activity.attachments.length > 1) {
         props.activity.attachments.map((attach: any, key: number) => {
           setTimeout(function () {
-            console.log(key);
             Image.getSize(
               attach?.content?.images[0].url,
               (width: number, height: number) => {
@@ -375,8 +374,8 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
           modules={props.modules}
           customizeConfiguration={props.customizeConfiguration}
         />
-        <Text style={{ marginVertical: props.activity.text && 10 }}>
-          {props.activity.text}
+        <Text style={{ marginVertical: props.activity?.text && 10 }}>
+          {props.activity?.text}
         </Text>
       </>
     );
@@ -418,7 +417,6 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
       {props.type === 'system' ? null : (
         <View style={[positionCls]}>
           <View style={[styles.rceMboxBody]}>
-            {console.log('fifi : ', props.customizeConfiguration)}
             {(props.title || props.avatar) && props.position !== 'left' && (
               <View
                 style={[

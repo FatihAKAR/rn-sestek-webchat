@@ -5,7 +5,13 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { Modal, View, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  Modal,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import { useChat } from '../plugin/useChat';
 import type { PropsModalComponent } from '../types';
 import BodyComponent from './body';
@@ -83,12 +89,14 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
           closeModal && closeModal();
         }}
       >
-        <CloseModal
-          closeModal={closedModalManagment?.closeModal}
-          setCloseModal={closedModalManagment?.setCloseModal}
-          closeConversation={closeConversation}
-          closeModalSettings={customizeConfiguration?.closeModalSettings}
-        />
+        {appStyle.closeModalSettings?.use && (
+          <CloseModal
+            closeModal={closedModalManagment?.closeModal}
+            setCloseModal={closedModalManagment?.setCloseModal}
+            closeConversation={closeConversation}
+            closeModalSettings={customizeConfiguration?.closeModalSettings}
+          />
+        )}
 
         <KeyboardAvoidingView
           style={styles.container}
@@ -108,6 +116,10 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
               clickClosedConversationModalFunc={
                 clickClosedConversationModalFunc
               }
+              closeModalStatus={
+                customizeConfiguration?.closeModalSettings?.use ? true : false
+              }
+              closeConversation={closeConversation}
               headerText={appStyle?.headerText || undefined}
               hideIcon={customizeConfiguration?.headerHideIcon}
               closeIcon={customizeConfiguration?.headerCloseIcon}

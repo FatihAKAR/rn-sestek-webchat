@@ -33,8 +33,8 @@ export default interface PropsCustomizeConfiguration {
   sliderThumbTintColor?: string;
   sliderPlayImage?: BodyColorOrImageType;
   sliderPauseImage?: BodyColorOrImageType;
-  closeModalSettings: object;
-  beforeAudioClick?: () => Promise<void>;
+  closeModalSettings: CloseModalSettings;
+  permissionAudioCheck?: () => Promise<void>;
 }
 
 interface BodyColorOrImageType {
@@ -45,4 +45,25 @@ interface BodyColorOrImageType {
 export interface IconType {
   type: 'uri' | 'component';
   value: any;
+}
+
+interface CloseModalSettings {
+  use: boolean;
+  text: string;
+  textColor: string;
+  background: string;
+  buttons: {
+    yesButton: {
+      text: string;
+      textColor: string;
+      background: string;
+      borderColor: string;
+    };
+    noButton: {
+      text: string;
+      textColor: string;
+      background: string;
+      borderColor: string;
+    };
+  };
 }

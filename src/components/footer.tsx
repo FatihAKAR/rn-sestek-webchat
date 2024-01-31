@@ -46,7 +46,6 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
       var result = await recorder?.onStopRecord();
       const dirFile = result?.url?.split('/');
       if (dirFile) {
-        console.log('TEST', dirFile[dirFile.length - 1]);
         sendAudio &&
           sendAudio(result?.url, dirFile[dirFile.length - 1], result?.data);
         setTimeout(() => {
@@ -66,8 +65,8 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
   };
 
   const touchRecord = () => {
-    if (customizeConfiguration?.beforeAudioClick) {
-      customizeConfiguration.beforeAudioClick().then(() => triggerRecord());
+    if (customizeConfiguration?.permissionAudioCheck) {
+      customizeConfiguration.permissionAudioCheck().then(() => triggerRecord());
     } else {
       triggerRecord();
     }
@@ -99,7 +98,7 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
       </View>
       {modules?.AudioRecorderPlayer && modules?.RNFS && (
         <TouchableOpacity
-          onPress={touchRecord}
+          onPress={() => touchRecord()}
           style={[
             styles.audioButton,
             {
@@ -111,7 +110,7 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
           ]}
         >
           <Image
-            style={styles.icon}
+            style={styles.MicButtonIcon}
             source={
               recordStart
                 ? RecordInIcon
@@ -129,7 +128,7 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
           { backgroundColor: appStyle?.bottomInputSendButtonColor },
         ]}
       >
-        <Image style={[styles.icon]} source={SendIconWhite} />
+        <Image style={[styles.SendButtonIcon]} source={SendIconWhite} />
       </TouchableOpacity>
     </View>
   );

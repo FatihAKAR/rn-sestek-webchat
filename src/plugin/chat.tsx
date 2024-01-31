@@ -5,7 +5,13 @@ import React, {
   forwardRef,
   useRef,
 } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { GeneralManager, SignalRClient } from '../services';
 import ModalComponent, { ModalCompRef } from '../components/modal';
 import { ChatIcon } from '../image';
@@ -18,7 +24,7 @@ import { styles } from './chat-styles';
 let sessionId = GeneralManager.createUUID();
 let client = new SignalRClient(GeneralManager.getWebchatHost());
 
-console.log('sessionID : ', sessionId);
+console.log('session-id : ', sessionId);
 
 export const ChatModal = forwardRef<ChatModalProps, PropsChatModal>(
   (props, ref) => {
@@ -127,6 +133,16 @@ export const ChatModal = forwardRef<ChatModalProps, PropsChatModal>(
         )}
         {start && (
           <StyleContextProvider>
+            {console.log(visible)}
+            {visible && (
+              <StatusBar
+                animated={true}
+                backgroundColor="#7743DB"
+                barStyle="default"
+                showHideTransition="fade"
+                hidden={false}
+              />
+            )}
             <ModalComponent
               ref={modalRef}
               url={url || ChatModal.defaultProps?.url!}

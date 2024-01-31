@@ -67,7 +67,6 @@ const useChat = ({
 
   const attachClientOnMessage = () => {
     client.onmessage((details: any, message: any) => {
-      console.log('details : ', details, '- message :', message);
       const messageBody =
         typeof message === 'string' ? JSON.parse(message) : message;
       if (messageBody?.channelData) {
@@ -190,7 +189,6 @@ const useChat = ({
       conversationId: sessionId,
       fullName: defaultConfiguration.fullName,
     });
-    console.log(filename);
     setMessageList((messages: any) => [
       ...messages,
       { type: 'typing', message: 'xxxxx' },
@@ -229,7 +227,6 @@ const useChat = ({
       name: 'channel',
       data: defaultConfiguration.channel || '',
     });
-    console.log('ses : ', formData);
     const replaceLink = url.replace('chathub', 'Home/SendAudio');
     sendAudioSocket({ replaceLink, formData });
   };

@@ -70,7 +70,6 @@ const StyleContextProvider = (props: any) => {
       }
     );
     const json = await response.json();
-    console.log(json);
 
     const chatAvatatUri = json?.agent?.avatar?.split('"')[3];
     const userAvatatUri = json?.client?.avatar?.split('"')[3];
@@ -95,33 +94,33 @@ const StyleContextProvider = (props: any) => {
       chatStartButtonBackground: json?.bubbleColor,
       bottomInputText: json?.placeholder,
       closeModalSettings: {
-        use: true,
+        use: propsCustomizeConfiguration?.closeModalSettings?.use,
         text: json?.warningModal?.content,
-        textColor: propsCustomizeConfiguration.closeModalSettings.textColor,
-        background: propsCustomizeConfiguration.closeModalSettings.background,
+        textColor: propsCustomizeConfiguration?.closeModalSettings?.textColor,
+        background: propsCustomizeConfiguration?.closeModalSettings?.background,
         buttons: {
           yesButton: {
             text: json?.warningModal?.acceptButton,
             textColor:
-              propsCustomizeConfiguration.closeModalSettings.buttons.yesButton
-                .textColor,
+              propsCustomizeConfiguration?.closeModalSettings?.buttons
+                ?.yesButton.textColor,
             background:
-              propsCustomizeConfiguration.closeModalSettings.buttons.yesButton
-                .background,
+              propsCustomizeConfiguration?.closeModalSettings?.buttons
+                ?.yesButton.background,
             borderColor:
-              propsCustomizeConfiguration.closeModalSettings.buttons.yesButton
-                .borderColor,
+              propsCustomizeConfiguration?.closeModalSettings?.buttons
+                ?.yesButton.borderColor,
           },
           noButton: {
             text: json?.warningModal?.noButton,
             textColor:
-              propsCustomizeConfiguration.closeModalSettings.buttons.noButton
+              propsCustomizeConfiguration?.closeModalSettings?.buttons?.noButton
                 .textColor,
             background:
-              propsCustomizeConfiguration.closeModalSettings.buttons.noButton
+              propsCustomizeConfiguration?.closeModalSettings?.buttons?.noButton
                 .background,
             borderColor:
-              propsCustomizeConfiguration.closeModalSettings.buttons.noButton
+              propsCustomizeConfiguration?.closeModalSettings?.buttons?.noButton
                 .borderColor,
           },
         },

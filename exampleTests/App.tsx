@@ -1,5 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import {ChatModal, ChatModalRef} from '../src/index';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
@@ -32,7 +40,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(modalRef.current.responseData);
+    console.log('response event : ', modalRef.current.responseData);
   }, [responseData]);
 
   const pressTriggerVisible = () => {
@@ -52,18 +60,24 @@ export default function App() {
     //console.log(JSON.stringify(data));
   };
 
-  const beforeAudioFunc = () => {
+  const permissionAudioCheck = async () => {
     return new Promise<void>((resolve, reject) => {
-      resolve();
+      if (Platform.OS === 'android') {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        ).then(res => {
+          if (res === PermissionsAndroid.RESULTS.GRANTED) {
+            resolve();
+          }
+        });
+      } else {
+        resolve();
+      }
     });
   };
 
-  const customActionDataEx = {
-    tel: '905301138326',
-  };
-
-  const customActionDataExNdUi = {
-    tel: '905301138326',
+  const customActionDataExample = {
+    tel: '900000000000',
   };
   const integrationId = '24943652-7235-d2ce-ff39-3a0af91ec61e';
   return (
@@ -135,7 +149,7 @@ export default function App() {
           clientId: 'mobile-testing',
           enableNdUi: true,
           getResponseData: setResponse,
-          customActionData: JSON.stringify(customActionDataExNdUi),
+          customActionData: JSON.stringify(customActionDataExample),
         }}
         customizeConfiguration={{
           // Header
@@ -187,19 +201,19 @@ export default function App() {
           chatStartButtonBackgroundSize: 70,
           chatStartButtonHide: false,
           // Slider
-          sliderMaximumTrackTintColor: 'gray',
-          sliderThumbTintColor: 'blue',
-          sliderMinimumTrackTintColor: 'pink',
+          sliderMaximumTrackTintColor: 'white',
+          sliderThumbTintColor: '#C3ACD0',
+          sliderMinimumTrackTintColor: '#C3ACD0',
           sliderPauseImage: {
             type: 'image',
-            value: require('../src/image/pause2.png'),
+            value: require('../src/image/pause-audio.png'),
           },
           sliderPlayImage: {
             type: 'image',
-            value: require('../src/image/play2.png'),
+            value: require('../src/image/play-audio.png'),
           },
           // Before Func
-          beforeAudioClick: beforeAudioFunc,
+          permissionAudioCheck: permissionAudioCheck,
           // Close Modal
           closeModalSettings: {
             use: true,
@@ -210,14 +224,14 @@ export default function App() {
               yesButton: {
                 text: 'Evet',
                 textColor: 'white',
-                background: '#7f81ae',
+                background: '#863CEB',
                 borderColor: 'transparent',
               },
               noButton: {
                 text: 'Hayır',
                 textColor: 'black',
                 background: 'transparent',
-                borderColor: 'black',
+                borderColor: '#863CEB',
               },
             },
           },
@@ -229,7 +243,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#abaee6',
+    backgroundColor: '#b796e7',
     //marginTop: Platform.OS === "ios" ? 33 : 0,
     flex: 1,
     alignItems: 'center',

@@ -109,7 +109,7 @@ const AudioComponent: FC<PropsAudio> = (props) => {
         >
           <Image
             source={!start ? PlayIconOrImage : PauseIconOrImage}
-            style={{ width: 24, height: 24 }}
+            style={{ width: 20, height: 20 }}
           />
         </TouchableOpacity>
       </View>
@@ -125,7 +125,7 @@ const AudioComponent: FC<PropsAudio> = (props) => {
             style={{
               margin: 0,
               width: 230,
-              transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+              transform: [{ scaleX: 0.2 }, { scaleY: 0.2 }],
             }}
             value={
               stateRecord.playTime &&

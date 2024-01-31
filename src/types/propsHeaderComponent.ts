@@ -4,4 +4,6 @@ export default interface PropsHeaderComponent {
   headerText?: string;
   closeIcon?: any;
   hideIcon?: any;
+  closeModalStatus?: boolean;
+  closeConversation: Function;
 }

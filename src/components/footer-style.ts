@@ -17,11 +17,15 @@ export const styles = StyleSheet.create({
     // borderRadius: 10,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
+    paddingLeft: 10,
   },
-  icon: {
+  SendButtonIcon: {
     width: 25,
     height: 25,
-    // margin: 5,
+  },
+  MicButtonIcon: {
+    width: 25,
+    height: 25,
   },
   audioButton: {
     height: '100%',
@@ -38,7 +42,7 @@ export const styles = StyleSheet.create({
   },
   sendButton: {
     height: '100%',
-    width: 40,
+    width: 53,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

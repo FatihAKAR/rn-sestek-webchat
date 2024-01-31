@@ -1,13 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  headerConatiner: {
+  headerContainer: {
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
-  },
-  headerContainer: {
-    flex: 1,
+    alignItems:"center"
   },
   headerText: {
     flex: 1,
