@@ -374,7 +374,13 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
           modules={props.modules}
           customizeConfiguration={props.customizeConfiguration}
         />
-        <Text style={{ marginVertical: props.activity?.text && 10 }}>
+        <Text
+          style={{
+            marginVertical: props.activity?.text && 10,
+            color: props?.userMessageBoxTextColor ?? 'white',
+            paddingLeft: 10,
+          }}
+        >
           {props.activity?.text}
         </Text>
       </>
@@ -484,13 +490,6 @@ const MessageBox: FC<PropsMessageBoxComponent> = (props) => {
                       : appStyle?.chatBotMessageBoxTextColor,
                 }}
               >
-                {/* {props.activity?.timestamp &&
-                  (props.dateString ||
-                    `${new Date(
-                      props.activity?.timestamp
-                    ).toLocaleDateString()} ${new Date(
-                      props.activity?.timestamp
-                    ).toLocaleTimeString()}`)} */}
                 {(props.activity?.timestamp || props.dateString) &&
                   getTimeGenerate({ timestamp: props.activity.timestamp })}
               </Text>

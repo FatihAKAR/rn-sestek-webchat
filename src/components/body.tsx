@@ -15,10 +15,13 @@ const BodyComponent: FC<PropsBodyComponent> = (props) => {
     chatBotMessageBoxHeaderName,
     chatBotMessageBoxHeaderNameColor,
     userMessageBoxHeaderNameColor,
+    userMessageBoxTextColor,
   } = props.customizeConfiguration;
 
   const getUserName = (channel: any) => {
-    return channel ? userMessageBoxHeaderName || 'User' : chatBotMessageBoxHeaderName || 'Chatbot';
+    return channel
+      ? userMessageBoxHeaderName || 'User'
+      : chatBotMessageBoxHeaderName || 'Chatbot';
   };
 
   const getTextColor = (channel: any) => {
@@ -40,31 +43,32 @@ const BodyComponent: FC<PropsBodyComponent> = (props) => {
           .slice(1)
           .filter((x) => x.message !== '' && x.message !== '<p></p>')
           .map((x: any, key: number) => (
-              <MessageBox
-                {...props}
-                modules={props.modules}
-                key={key}
-                position={x.channel ? 'left' : 'right'}
-                type={x?.type || 'text'}
-                activity={x}
-                status={null}
-                title={getUserName(x?.channel)}
-                titleColor={getTextColor(x?.channel)}
-                avatar={
-                  x.channel
-                    ? GeneralManager.returnIconData(
-                        userMessageBoxIcon?.type,
-                        userMessageBoxIcon?.value,
-                        RobotIcon
-                      )
-                    : GeneralManager.returnIconData(
-                        chatBotMessageIcon?.type,
-                        chatBotMessageIcon?.value,
-                        RobotIcon
-                      )
-                }
-                renderAddCmp={undefined}
-              />
+            <MessageBox
+              {...props}
+              modules={props.modules}
+              userMessageBoxTextColor={userMessageBoxTextColor}
+              key={key}
+              position={x.channel ? 'left' : 'right'}
+              type={x?.type || 'text'}
+              activity={x}
+              status={null}
+              title={getUserName(x?.channel)}
+              titleColor={getTextColor(x?.channel)}
+              avatar={
+                x.channel
+                  ? GeneralManager.returnIconData(
+                      userMessageBoxIcon?.type,
+                      userMessageBoxIcon?.value,
+                      RobotIcon
+                    )
+                  : GeneralManager.returnIconData(
+                      chatBotMessageIcon?.type,
+                      chatBotMessageIcon?.value,
+                      RobotIcon
+                    )
+              }
+              renderAddCmp={undefined}
+            />
           ))}
       </ScrollView>
     </SafeAreaView>

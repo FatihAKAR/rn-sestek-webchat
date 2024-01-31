@@ -130,7 +130,7 @@ export default function App() {
       <FlashMessage position="top" />
       {/* @ts-expect-error Server Component */}
       <ChatModal
-        url={`https://va.tr.knovvu.com/webchat/chathub`}
+        url={`https://eu.va.knovvu.com/webchat/chathub`}
         //url={`https://nd-test-webchat.sestek.com/chathub`}
         modules={{
           AudioRecorderPlayer: AudioRecorderPlayer,
@@ -142,8 +142,8 @@ export default function App() {
         ref={modalRef}
         defaultConfiguration={{
           sendConversationStart: true,
-          tenant: 'tiklagelsinva',
-          projectName: 'Tikla_Gelsin',
+          tenant: 'Demo',
+          projectName: 'MasterBankingDemo_1_0',
           integrationId: integrationId,
           channel: 'Mobil',
           clientId: 'mobile-testing',

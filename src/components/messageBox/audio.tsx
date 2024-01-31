@@ -94,7 +94,9 @@ const AudioComponent: FC<PropsAudio> = (props) => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        width: 250,
+        width: '100%',
+        minWidth: 150,
+        paddingRight: 10,
       }}
     >
       <View
@@ -113,7 +115,6 @@ const AudioComponent: FC<PropsAudio> = (props) => {
           />
         </TouchableOpacity>
       </View>
-
       {RNSlider ? (
         <View
           style={{
@@ -124,18 +125,18 @@ const AudioComponent: FC<PropsAudio> = (props) => {
           <RNSlider
             style={{
               margin: 0,
-              width: 230,
+              width: '100%',
               transform: [{ scaleX: 0.2 }, { scaleY: 0.2 }],
             }}
             value={
               stateRecord.playTime &&
-              parseInt(stateRecord.playTime.substring(4, 5))
+              parseInt(stateRecord.playTime.substring(3, 5))
             }
             minimumValue={0}
             disabled
             maximumValue={
               stateRecord.duration &&
-              parseInt(stateRecord.duration.substring(4, 5))
+              parseInt(stateRecord.duration.substring(3, 5))
             }
             minimumTrackTintColor={AuidoProp.sliderMinimumTrackTintColor}
             maximumTrackTintColor={AuidoProp.sliderMaximumTrackTintColor}

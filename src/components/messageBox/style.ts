@@ -41,16 +41,17 @@ export default StyleSheet.create({
     maxWidth: width - 50,
     alignSelf: 'flex-end',
 
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //     width: -5,
-    //     height: 5,
-    // },
-    // shadowOpacity: 0.34,
-    // shadowRadius: 6.27,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 4.22,
 
-    // elevation: 10,
-    marginBottom: 20,
+    elevation: 2,
+
+    marginBottom: 10,
   },
 
   rceMboxBody: {
