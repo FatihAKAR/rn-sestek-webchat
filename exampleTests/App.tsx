@@ -79,7 +79,6 @@ export default function App() {
   const customActionDataExample = {
     tel: '900000000000',
   };
-  const integrationId = '24943652-7235-d2ce-ff39-3a0af91ec61e';
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>
@@ -144,7 +143,6 @@ export default function App() {
           sendConversationStart: true,
           tenant: 'Demo',
           projectName: 'MasterBankingDemo_1_0',
-          integrationId: integrationId,
           channel: 'Mobil',
           clientId: 'mobile-testing',
           enableNdUi: true,
