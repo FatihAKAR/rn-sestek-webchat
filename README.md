@@ -1,9 +1,8 @@
 # rn-sestek-webchat
 
-![Screen Recording 2024-01-31 at 14 59 20](https://github.com/sestek/rn-sestek-webchat/assets/54579230/24bb21fa-9492-4cc8-8b0b-5065a6f15523)
 
+![Adsız tasarım](https://github.com/sestek/rn-sestek-webchat/assets/54579230/3dc081b5-cf51-47a2-beb1-59d0e6d6660c)
 
-https://github.com/sestek/rn-sestek-webchat/assets/54579230/31406b39-6d70-492b-a0b8-b5f1b1d70e39
 
 
 
