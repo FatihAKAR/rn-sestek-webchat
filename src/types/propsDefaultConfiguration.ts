@@ -1,5 +1,5 @@
 export default interface DefaultConfiguration {
-  sendConversationStart: boolean;
+  sendConversationStart?: boolean;
   customAction?: any;
   customActionData?: any;
   projectName?: string;
@@ -9,5 +9,5 @@ export default interface DefaultConfiguration {
   channel: string;
   fullName?: string;
   enableNdUi?: boolean;
-  getResponseData: Function;
+  getResponseData?: Function;
 }

@@ -26,7 +26,9 @@ const useChat = ({
     });
   };
   const setResponseFunc = (customAction: any, customActionData: any) => {
-    getResponseData({ customAction, customActionData });
+    if (getResponseData) {
+      getResponseData({ customAction, customActionData });
+    }
   };
 
   useEffect(() => {

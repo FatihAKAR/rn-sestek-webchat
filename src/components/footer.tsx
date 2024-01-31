@@ -83,6 +83,9 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
               borderBottomWidth: 1,
               borderLeftWidth: 1,
               borderColor: appStyle?.bottomInputBorderColor,
+              borderTopRightRadius: recorder ? 0 : 10,
+              borderBottomRightRadius: recorder ? 0 : 10,
+              borderRightWidth: recorder ? 0 : 1,
             },
           ]}
           value={inputData && inputData}
