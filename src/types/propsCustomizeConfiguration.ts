@@ -1,33 +1,40 @@
 export default interface PropsCustomizeConfiguration {
   headerColor?: string;
   headerText?: string;
+  headerTextColor?: string;
+  headerHideIcon?: IconType;
+  headerCloseIcon?: IconType;
   bottomColor?: string;
   bottomInputText?: string;
+  bottomInputBorderColor?: string;
   bottomVoiceIcon?: IconType;
   bottomSendIcon?: IconType;
-  incomingIcon?: IconType;
-  incomingText?: string;
-  incomingTextColor?: string;
-  outgoingIcon?: IconType;
-  outgoingText?: string;
-  outgoingTextColor?: string;
-  messageColor?: string;
-  messageBoxColor?: string;
-  bodyColorOrImage?: BodyColorOrImageType;
-  firstIconHide?: boolean;
-  firsIcon?: IconType;
-  firstColor?: string;
-  firstSize?: number;
-  closeIcon?: any;
-  hideIcon?: any;
-  leftMessageBoxColor?: string
+  bottomInputSendButtonColor?: string;
+  userMessageBoxIcon?: IconType;
+  userMessageBoxTextColor?: string;
+  userMessageBoxHeaderName?: string;
+  userMessageBoxHeaderNameColor?: string;
+  chatBotMessageIcon?: IconType;
+  chatBotMessageBoxTextColor?: string;
+  chatBotMessageBoxHeaderName?: string;
+  chatBotMessageBoxHeaderNameColor?: string;
+  chatBotMessageBoxBackground?: string;
+  chatBotMessageBoxButtonBackground?: string;
+  chatBotMessageBoxButtonBorderColor?: string;
+  chatBotMessageBoxButtonTextColor?: string;
+  chatBody?: BodyColorOrImageType;
+  chatStartButtonHide?: boolean;
+  chatStartButton?: IconType;
+  chatStartButtonBackground?: string;
+  chatStartButtonBackgroundSize?: number;
+  userMessageBoxBackground?: string;
   sliderMinimumTrackTintColor?: string;
   sliderMaximumTrackTintColor?: string;
   sliderThumbTintColor?: string;
   sliderPlayImage?: BodyColorOrImageType;
   sliderPauseImage?: BodyColorOrImageType;
-  closeModalSettings: object,
-  beforeAudioClick?: () => Promise<void>;
+  closeModalSettings: CloseModalSettings;
+  permissionAudioCheck?: () => Promise<void>;
 }
 
 interface BodyColorOrImageType {
@@ -38,4 +45,25 @@ interface BodyColorOrImageType {
 export interface IconType {
   type: 'uri' | 'component';
   value: any;
+}
+
+interface CloseModalSettings {
+  use: boolean;
+  text: string;
+  textColor: string;
+  background: string;
+  buttons: {
+    yesButton: {
+      text: string;
+      textColor: string;
+      background: string;
+      borderColor: string;
+    };
+    noButton: {
+      text: string;
+      textColor: string;
+      background: string;
+      borderColor: string;
+    };
+  };
 }

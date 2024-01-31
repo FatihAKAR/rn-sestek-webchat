@@ -1,40 +1,55 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { Image, TextInput, TouchableOpacity, View } from 'react-native';
 import type { PropsFooterComponent } from 'src/types';
 import { styles } from './footer-style';
-import { RecordInIcon, RecordOutIcon, SendIcon, RecordDisable } from '../image';
+import {
+  RecordInIcon,
+  RecordOutIcon,
+  RecordDisable,
+  SendIconWhite,
+} from '../image';
 import { Recorder } from '../services';
+import { StyleContext } from '../context/StyleContext';
 
 const FooterComponent: FC<PropsFooterComponent> = (props) => {
-  const recordEnabled =
-    props.modules.AudioRecorderPlayer && props.modules.RNFS ? true : false;
-
-  const [recorder] = useState<Recorder | undefined>(
-    recordEnabled
+  const {
+    modules,
+    sendAudio,
+    inputData,
+    sendMessage,
+    changeInputData,
+    customizeConfiguration,
+    placeholderText,
+  } = props;
+  const Record =
+    modules?.AudioRecorderPlayer && modules?.RNFS
       ? new Recorder(
-          props.modules.AudioRecorderPlayer,
-          props.modules.RNFS,
-          props.modules.Record
+          modules?.AudioRecorderPlayer,
+          modules?.RNFS,
+          modules?.Record
         )
-      : undefined
-  );
+      : undefined;
+
+  const [recorder] = useState<Recorder | undefined>(Record);
   const [recordStart, setRecordStart] = useState<boolean>(false);
   const [disableRecord, setDisableRecord] = useState<boolean>(false);
 
+  const { appStyle } = useContext(StyleContext);
+
   const triggerRecord = async () => {
     if (disableRecord) {
-      return; // Don't perform the action when recording is disabled
+      return;
     }
 
     if (recordStart) {
-      setDisableRecord(true); // Disable recording when it starts
+      setDisableRecord(true);
       var result = await recorder?.onStopRecord();
       const dirFile = result?.url?.split('/');
       if (dirFile) {
-        console.log('TEST', dirFile[dirFile.length - 1]);
-        props.sendAudio(result?.url, dirFile[dirFile.length - 1], result?.data);
+        sendAudio &&
+          sendAudio(result?.url, dirFile[dirFile.length - 1], result?.data);
         setTimeout(() => {
-          setDisableRecord(false); // Enable recording after 2 seconds
+          setDisableRecord(false);
         }, 3500);
       }
     } else {
@@ -43,26 +58,15 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
     setRecordStart((old) => !old);
   };
 
-  // Interactive effects when the disableRecord state changes
-  useEffect(() => {
-    if (disableRecord) {
-      // Actions to perform when recording is disabled (e.g., visual feedback)
-    } else {
-      // Actions to perform when recording is enabled (e.g., visual feedback)
-    }
-  }, [disableRecord]);
-
   const clickSendButton = () => {
-    if (!props.inputData) return;
-    props.sendMessage(props.inputData);
-    props.changeInputData('');
+    if (!inputData) return;
+    sendMessage && sendMessage(inputData && inputData);
+    changeInputData && changeInputData('');
   };
 
   const touchRecord = () => {
-    if (props.customizeConfiguration.beforeAudioClick) {
-      props.customizeConfiguration
-        .beforeAudioClick()
-        .then(() => triggerRecord());
+    if (customizeConfiguration?.permissionAudioCheck) {
+      customizeConfiguration.permissionAudioCheck().then(() => triggerRecord());
     } else {
       triggerRecord();
     }
@@ -72,18 +76,41 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
         <TextInput
-          style={styles.textInput}
-          value={props.inputData}
-          onChangeText={(text: string) => props.changeInputData(text)}
-          placeholder={props.placeholderText || 'Please write a message'}
+          style={[
+            styles.textInput,
+            {
+              borderTopWidth: 1,
+              borderBottomWidth: 1,
+              borderLeftWidth: 1,
+              borderColor: appStyle?.bottomInputBorderColor,
+            },
+          ]}
+          value={inputData && inputData}
+          onChangeText={(text: string) =>
+            changeInputData && changeInputData(text)
+          }
+          placeholder={
+            (placeholderText && placeholderText) || 'Please write a message'
+          }
           placeholderTextColor="grey"
           keyboardType="default"
         />
       </View>
-      {props.modules.AudioRecorderPlayer && props.modules.RNFS && (
-        <TouchableOpacity onPress={touchRecord}>
+      {modules?.AudioRecorderPlayer && modules?.RNFS && (
+        <TouchableOpacity
+          onPress={() => touchRecord()}
+          style={[
+            styles.audioButton,
+            {
+              borderRightWidth: 1,
+              borderColor: appStyle?.bottomInputBorderColor,
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+            },
+          ]}
+        >
           <Image
-            style={styles.icon}
+            style={styles.MicButtonIcon}
             source={
               recordStart
                 ? RecordInIcon
@@ -94,8 +121,14 @@ const FooterComponent: FC<PropsFooterComponent> = (props) => {
           />
         </TouchableOpacity>
       )}
-      <TouchableOpacity onPress={clickSendButton}>
-        <Image style={styles.icon} source={SendIcon} />
+      <TouchableOpacity
+        onPress={clickSendButton}
+        style={[
+          styles.sendButton,
+          { backgroundColor: appStyle?.bottomInputSendButtonColor },
+        ]}
+      >
+        <Image style={[styles.SendButtonIcon]} source={SendIconWhite} />
       </TouchableOpacity>
     </View>
   );

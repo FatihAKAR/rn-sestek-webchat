@@ -14,32 +14,32 @@ const CloseModal = forwardRef<InProps, PropsCloseModalSettings>(
       props;
     return (
       <Modal animationType="slide" transparent={true} visible={closeModal}>
-        <View style={styles(closeModalSettings).centeredView}>
-          <View style={styles(closeModalSettings).modalView}>
-            <Text style={styles(closeModalSettings).modalText}>
+        <View style={styles(closeModalSettings)?.centeredView}>
+          <View style={styles(closeModalSettings)?.modalView}>
+            <Text style={styles(closeModalSettings)?.modalText}>
               {closeModalSettings?.text ||
                 "Chat'ten çıkmak istediğinize emin misiniz ??"}
             </Text>
             <View style={styles(closeModalSettings).buttonContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  closeConversation();
                   setCloseModal(false);
                 }}
-                style={styles(closeModalSettings).yesButton}
+                style={styles(closeModalSettings)?.noButton}
               >
-                <Text style={styles(closeModalSettings).yesButtonText}>
-                  {closeModalSettings?.buttons?.yesButton?.text || 'Evet'}
+                <Text style={styles(closeModalSettings)?.noButtonText}>
+                  {closeModalSettings?.buttons?.noButton?.text || 'Hayır'}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
+                  closeConversation();
                   setCloseModal(false);
                 }}
-                style={styles(closeModalSettings).noButton}
+                style={styles(closeModalSettings)?.yesButton}
               >
-                <Text style={styles(closeModalSettings).noButtonText}>
-                  {closeModalSettings?.buttons?.noButton?.text || 'Hayır'}
+                <Text style={styles(closeModalSettings)?.yesButtonText}>
+                  {closeModalSettings?.buttons?.yesButton?.text || 'Evet'}
                 </Text>
               </TouchableOpacity>
             </View>

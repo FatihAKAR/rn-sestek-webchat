@@ -1,11 +1,16 @@
-import React, { forwardRef, useState, useImperativeHandle } from 'react';
+import React, {
+  forwardRef,
+  useState,
+  useImperativeHandle,
+  useContext,
+  useEffect,
+} from 'react';
 import {
-  Alert,
   Modal,
   View,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { useChat } from '../plugin/useChat';
 import type { PropsModalComponent } from '../types';
@@ -14,53 +19,84 @@ import FooterComponent from './footer';
 import HeaderComponent from './header';
 import { styles } from './modal-style';
 import CloseModal from './closeModal';
-
-export interface ModalCompRef {
-  messageList: any;
-}
+import { StyleContext } from '../context/StyleContext';
+import { ModalCompRef } from '../types/components/ModalComponent';
+import GenerateBody from './body/GenerateBody';
 
 const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
   (props, ref) => {
+    const {
+      url,
+      defaultConfiguration,
+      sessionId,
+      client,
+      modules,
+      customizeConfiguration,
+      closeConversation,
+      closedModalManagment,
+      closeModal,
+      visible,
+      clickClosedConversationModalFunc,
+    } = props;
+
     const [inputData, setInputData] = useState<string>('');
     const changeInputData = (text: string) => setInputData(text);
 
     const [messageList, sendMessage, sendAudio] = useChat({
-      url: props?.url,
-      defaultConfiguration: props.defaultConfiguration,
-      messages: [],
-      sessionId: props.sessionId,
-      client: props.client,
-      rnfs: props.modules.RNFS,
+      url: url,
+      defaultConfiguration: defaultConfiguration,
+      sessionId: sessionId,
+      client: client,
+      rnfs: modules?.RNFS,
     });
-
-    //console.log(JSON.stringify(messageList));
-    const {
-      bodyColorOrImage,
-      headerColor,
-      headerText,
-      bottomColor,
-      bottomInputText,
-    } = props.customizeConfiguration;
 
     useImperativeHandle(ref, () => ({
       messageList: messageList,
     }));
 
+    const { appStyle, handleStyle, getCssIntegration } =
+      useContext(StyleContext);
+
+    useEffect(() => {
+      (async () => {
+        // if (defaultConfiguration.integrationId) {
+        //   await getCssIntegration(
+        //     defaultConfiguration.integrationId,
+        //     customizeConfiguration
+        //   );
+        // } else {
+        //   handleStyle(
+        //     customizeConfiguration,
+        //     defaultConfiguration.tenant,
+        //     defaultConfiguration.projectName
+        //   );
+        // }
+
+        handleStyle(
+          customizeConfiguration,
+          defaultConfiguration?.tenant,
+          defaultConfiguration?.projectName
+        );
+      })();
+    }, []);
+
     return (
       <Modal
         animationType={'slide'}
         transparent={true}
-        visible={props.visible}
+        visible={visible && Object.keys(appStyle).length > 0}
         onRequestClose={() => {
-          props.closeModal();
+          closeModal && closeModal();
         }}
       >
-        <CloseModal
-          closeModal={props?.closedModalManagment?.closeModal}
-          setCloseModal={props?.closedModalManagment?.setCloseModal}
-          closeConversation={props?.closeConversation}
-          closeModalSettings={props?.customizeConfiguration?.closeModalSettings}
-        />
+        {appStyle.closeModalSettings?.use && (
+          <CloseModal
+            closeModal={closedModalManagment?.closeModal}
+            setCloseModal={closedModalManagment?.setCloseModal}
+            closeConversation={closeConversation}
+            closeModalSettings={customizeConfiguration?.closeModalSettings}
+          />
+        )}
 
         <KeyboardAvoidingView
           style={styles.container}
@@ -70,63 +106,62 @@ const ModalComponent = forwardRef<ModalCompRef, PropsModalComponent>(
           <View
             style={[
               styles.header,
-              headerColor ? { backgroundColor: headerColor } : {},
+              appStyle?.headerColor
+                ? { backgroundColor: appStyle?.headerColor }
+                : {},
             ]}
           >
             <HeaderComponent
-              {...props}
-              headerText={headerText || undefined}
-              hideIcon={props.customizeConfiguration.hideIcon}
-              closeIcon={props.customizeConfiguration.closeIcon}
+              closeModal={closeModal}
+              clickClosedConversationModalFunc={
+                clickClosedConversationModalFunc
+              }
+              closeModalStatus={
+                customizeConfiguration?.closeModalSettings?.use ? true : false
+              }
+              closeConversation={closeConversation}
+              headerText={appStyle?.headerText || undefined}
+              hideIcon={customizeConfiguration?.headerHideIcon}
+              closeIcon={customizeConfiguration?.headerCloseIcon}
             />
           </View>
           <View
             style={{
               flex: 1,
               backgroundColor:
-                bodyColorOrImage?.type == 'color'
-                  ? bodyColorOrImage.value
+                appStyle?.chatBody?.type == 'color'
+                  ? appStyle?.chatBody?.value
                   : '#fff',
             }}
           >
-            {bodyColorOrImage?.type == 'image' && (
-              <ImageBackground
-                source={{ uri: bodyColorOrImage?.value }}
-                style={{ width: '100%', height: '100%' }}
-                resizeMode="stretch"
-              >
+            <GenerateBody
+              BodyComponent={
                 <BodyComponent
-                  modules={props.modules}
-                  customizeConfiguration={props.customizeConfiguration}
+                  modules={modules}
+                  customizeConfiguration={customizeConfiguration}
                   messageList={messageList}
                   changeInputData={changeInputData}
                   sendMessage={sendMessage}
                 />
-              </ImageBackground>
-            )}
-            {bodyColorOrImage?.type != 'image' && (
-              <BodyComponent
-                modules={props.modules}
-                customizeConfiguration={props.customizeConfiguration}
-                messageList={messageList}
-                changeInputData={changeInputData}
-                sendMessage={sendMessage}
-              />
-            )}
+              }
+            />
           </View>
           <View
             style={[
               styles.footer,
-              bottomColor ? { backgroundColor: bottomColor } : {},
+              appStyle?.bottomColor
+                ? { backgroundColor: appStyle?.bottomColor }
+                : {},
             ]}
           >
             <FooterComponent
-              {...props}
+              modules={modules}
               inputData={inputData}
               changeInputData={changeInputData}
+              customizeConfiguration={customizeConfiguration}
               sendMessage={sendMessage}
               sendAudio={sendAudio}
-              placeholderText={bottomInputText}
+              placeholderText={appStyle?.bottomInputText}
             />
           </View>
         </KeyboardAvoidingView>

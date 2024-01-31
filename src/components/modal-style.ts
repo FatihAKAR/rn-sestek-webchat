@@ -6,20 +6,23 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    paddingTop: 10,
+    // paddingTop: 10,
   },
   header: {
-    height: 40,
-    marginTop: GeneralManager.getMobileTopBottom('top'),
-    backgroundColor: GeneralManager.getColorAndText().backgroundColor,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    height: Platform.OS === 'android' ? 45 : 80,
+    width: '100%',
+    paddingTop:
+      Platform.OS === 'android' ? 0 : GeneralManager.getMobileTopBottom('top'),
   },
   body: {},
   footer: {
-    height: Platform.OS === 'android' ? 60 : 80,
+    height: Platform.OS === 'android' ? 67 : 80,
     backgroundColor: GeneralManager.getColorAndText().backgroundColor,
     padding: 10,
     paddingBottom: Platform.OS === 'android' ? 10 : 25,
+  },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
   },
 });

@@ -1,5 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import {ChatModal, ChatModalRef} from '../src/index';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
@@ -30,8 +38,9 @@ export default function App() {
   const setResponse = (value: any) => {
     setResponseData(value);
   };
+
   useEffect(() => {
-    console.log(responseData);
+    console.log('response event : ', modalRef.current.responseData);
   }, [responseData]);
 
   const pressTriggerVisible = () => {
@@ -51,21 +60,25 @@ export default function App() {
     //console.log(JSON.stringify(data));
   };
 
-  const beforeAudioFunc = () => {
+  const permissionAudioCheck = async () => {
     return new Promise<void>((resolve, reject) => {
-      resolve();
+      if (Platform.OS === 'android') {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        ).then(res => {
+          if (res === PermissionsAndroid.RESULTS.GRANTED) {
+            resolve();
+          }
+        });
+      } else {
+        resolve();
+      }
     });
   };
 
-  const customActionDataEx = {
-    tel: '905301138326',
+  const customActionDataExample = {
+    tel: '900000000000',
   };
-
-  const customActionDataExNdUi = {
-    tel: '905301138326',
-    
-  };
-
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>
@@ -134,51 +147,72 @@ export default function App() {
           clientId: 'mobile-testing',
           enableNdUi: true,
           getResponseData: setResponse,
-          customActionData: JSON.stringify(customActionDataExNdUi)
+          customActionData: JSON.stringify(customActionDataExample),
         }}
         customizeConfiguration={{
-          headerColor: '#7f81ae',
+          // Header
+          headerColor: '#7743DB',
           headerText: 'Knovvu',
-          bottomColor: '#7f81ae',
+          headerTextColor: 'white',
+          headerHideIcon: {
+            type: 'component',
+            value: require('./src/images/hide.png'),
+          },
+          headerCloseIcon: {
+            type: 'component',
+            value: require('./src/images/close.png'),
+          },
+          // Bottom
+          bottomColor: 'white',
           bottomInputText: 'Bottom input text..',
-          //bottomVoiceIcon: "<Cmp />",
-          //bottomSendIcon: "<Cmp />",
-          incomingIcon: {
+          bottomInputBorderColor: '#d5d5d5',
+          bottomInputSendButtonColor: '#7743DB',
+          // User MessageBox
+          userMessageBoxBackground: '#863CEB',
+          userMessageBoxTextColor: 'white',
+          userMessageBoxIcon: {
             type: 'uri',
-            value:
-              'https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png',
+            value: '',
           },
-          incomingText: '',
-          incomingTextColor: 'black',
-          outgoingIcon: {
+          userMessageBoxHeaderName: '',
+          userMessageBoxHeaderNameColor: 'white',
+          // ChatBot MessageBox
+          chatBotMessageBoxBackground: '#EFEFEF',
+          chatBotMessageBoxTextColor: 'black',
+          chatBotMessageIcon: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
           },
-          outgoingText: 'Knovvu',
-          outgoingTextColor: '#7f81ae',
-          messageColor: '#FCFBF7',
-          messageBoxColor: '#7f81ae',
-          //bodyColorOrImage: { type: 'image', value: 'https://i.pinimg.com/550x/4a/6f/59/4a6f59296f90c11d77744720ca10d1af.jpg' },
-          bodyColorOrImage: {type: 'color', value: '#7f81ae'},
-          firsIcon: {
+          chatBotMessageBoxHeaderName: 'Knovvu',
+          chatBotMessageBoxHeaderNameColor: 'black',
+          chatBotMessageBoxButtonBackground: 'white',
+          chatBotMessageBoxButtonTextColor: 'black',
+          chatBotMessageBoxButtonBorderColor: '#863CEB',
+          // Chat Body
+          chatBody: {type: 'color', value: 'white'},
+          // Chat Start Button
+          chatStartButton: {
             type: 'component',
             value: require('./src/images/knovvu_logo.png'),
           },
-          firstColor: 'white',
-          firstSize: 70,
-          leftMessageBoxColor: 'white',
-          sliderMaximumTrackTintColor: 'gray',
-          sliderThumbTintColor: 'blue',
-          sliderMinimumTrackTintColor: 'pink',
+          chatStartButtonBackground: 'white',
+          chatStartButtonBackgroundSize: 70,
+          chatStartButtonHide: false,
+          // Slider
+          sliderMaximumTrackTintColor: 'white',
+          sliderThumbTintColor: '#C3ACD0',
+          sliderMinimumTrackTintColor: '#C3ACD0',
           sliderPauseImage: {
             type: 'image',
-            value: require('../src/image/pause2.png'),
+            value: require('../src/image/pause-audio.png'),
           },
           sliderPlayImage: {
             type: 'image',
-            value: require('../src/image/play2.png'),
+            value: require('../src/image/play-audio.png'),
           },
-          beforeAudioClick: beforeAudioFunc,
+          // Before Func
+          permissionAudioCheck: permissionAudioCheck,
+          // Close Modal
           closeModalSettings: {
             use: true,
             text: "Chat'ten çıkmak istediğinize emin misiniz ?",
@@ -188,14 +222,14 @@ export default function App() {
               yesButton: {
                 text: 'Evet',
                 textColor: 'white',
-                background: '#7f81ae',
+                background: '#863CEB',
                 borderColor: 'transparent',
               },
               noButton: {
                 text: 'Hayır',
                 textColor: 'black',
                 background: 'transparent',
-                borderColor: 'black',
+                borderColor: '#863CEB',
               },
             },
           },
@@ -207,7 +241,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#abaee6',
+    backgroundColor: '#b796e7',
     //marginTop: Platform.OS === "ios" ? 33 : 0,
     flex: 1,
     alignItems: 'center',

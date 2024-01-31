@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import GeneralManager from './general';
 
 class Recorder {
@@ -29,25 +28,10 @@ class Recorder {
     this.recordPack.init(options);
     this.recordPack.on('data', async (data: any) => {});
     this.recordPack.start();
-
-    // const dirs = this.rnfs.fs.dirs.CacheDir + '/sestek_bot_audio';
-    // const path = Platform.select({
-    //   ios: 'sestek_bot_audio/' + GeneralManager.createUUID() + '.m4a',
-    //   android: `${dirs}/${GeneralManager.createUUID()}.mp3`,
-    // });
-    // await this.audioRecorderPlayer.startRecorder(path);
-    // this.audioRecorderPlayer.addRecordBackListener((e: any) => {
-    //   this.recordSecs = e.currentPosition;
-    //   this.recordTime = this.audioRecorderPlayer.mmssss(
-    //     Math.floor(e.currentPosition)
-    //   );
-    //   return;
-    // });
   };
 
   onStopRecord = async () => {
     const audioResult = await this.recordPack.stop();
-    console.log(audioResult)
     const audioFile: string = 'file://' + audioResult;
     this.recordSecs = 0;
     const dirFile = audioFile.split('/');
@@ -68,25 +52,11 @@ class Recorder {
     return path;
   };
 
-  //   onStartPlay = async (urlData?: string) => {
-  //     const msg = await this.audioRecorderPlayer.startPlayer(urlData);
-  //     this.audioRecorderPlayer.addPlayBackListener((e: any) => {
-  //       this.currentPositionSec = e.currentPosition;
-  //       this.currentDurationSec = e.duration;
-  //       this.playTime = this.audioRecorderPlayer.mmssss(
-  //         Math.floor(e.currentPosition)
-  //       );
-  //       this.duration = this.audioRecorderPlayer.mmssss(Math.floor(e.duration));
-  //       return;
-  //     });
-  //   };
-
   onPausePlay = async () => {
     await this.audioRecorderPlayer.pausePlayer();
   };
 
   onStopPlay = async () => {
-    console.log('onStopPlay');
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
   };
