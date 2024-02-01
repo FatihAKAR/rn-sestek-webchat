@@ -48,7 +48,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
-    border: 'none',
     borderRadius: 10,
   },
 });

@@ -79,6 +79,7 @@ export default function App() {
   const customActionDataExample = {
     tel: '900000000000',
   };
+
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>
