@@ -43,6 +43,16 @@ npm i --save @miblanchard/react-native-slider
 
 If you use to slider, you must also install the "@miblanchard/react-native-slider" package. You can follow the [link](https://www.npmjs.com/package/@miblanchard/react-native-slider) below to integrate
 
+### Listening to event from conversation
+You can easily catch the event with the responseData state you create in your code. 
+Create the state, then update your state in the setResponse function and send this function to ChatModal as props. 
+You can also provide whether the state has changed or not with your useffect or alternative solutions.
+
+### custom ActionData
+The CustomActionData field can be used for any custom information wanted to be passed to the bot, that's not included in the context object parameters.  
+It is recommended to be sent in key/value pairs. i.e.
+customActionData: "{\"channel\":\"xxx\",\"phoneNumber\":\"xxx xxx xx xx\",\"customerName\":\"John Doe\"}",
+
 ## Usage
 
 You may have a general understanding of how it works with the following snippet.
@@ -71,9 +81,9 @@ const pressEndConversation = () => {
     modalRef.current?.endConversation();
 }; // stop chat anywhere you want
 
-// capture event from chat
+// capture event from conversation
 const [responseData, setResponseData] = useState<any>({});
-  const setResponse = (value: any) => {
+const setResponse = (value: any) => {
     setResponseData(value);
 };
 
